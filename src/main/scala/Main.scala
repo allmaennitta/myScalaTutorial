@@ -1,0 +1,4 @@
+package ibe
+
+object Main {
+}
