@@ -1,7 +1,7 @@
 package ibe
 
 import org.scalatest._
-import ibe.SalutMonde.execute
+import ibe.examples.SalutMonde.execute
 
 class SalutMondeSpec extends FlatSpec with Matchers {
 
