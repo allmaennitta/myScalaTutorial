@@ -1,7 +1,10 @@
 package ibe.examples
 
 object Timer {
-  def oncePerSecond(callback: () => Unit) {
-    while (true) { callback(); Thread sleep 1000 }
+  def oncePerInterval(repetions: Int, pauseInterval: Int, callback: () => Unit) {
+    for( i <- 1 to repetions){
+      callback();
+      Thread sleep pauseInterval
+    }
   }
 }
