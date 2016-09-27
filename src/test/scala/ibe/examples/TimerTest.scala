@@ -12,15 +12,6 @@ class TimerTest extends FunSpec with Matchers {
   var dateArr = Array.empty[Long]
 
   describe("TimerTest") {
-    def measureTime() : Unit = {dateArr = dateArr :+ new Date().getTime()}
-    def absoluteValueOfDifference(minuend : Long, subtrahend : Long) : Long = {
-      abs((minuend-subtrahend))
-    }
-//    def between(measurement : Long, targetValue : Long, tolerance : Long = 10 ) : Boolean = {
-//      measurement >= targetValue - tolerance &&
-//      measurement <= targetValue + tolerance
-//    }
-
     it("should execute 3 times with an interval of 500ms") {
       val repetitions = 3
       val pauseInterval = 500 //ms
@@ -32,6 +23,10 @@ class TimerTest extends FunSpec with Matchers {
       absoluteValueOfDifference(dateArr(1), dateArr(0)) should be > 490L
       absoluteValueOfDifference(dateArr(1), dateArr(0)) should be < 510L
     }
-
   }
+  def measureTime() : Unit = {dateArr = dateArr :+ new Date().getTime()}
+  def absoluteValueOfDifference(minuend : Long, subtrahend : Long) : Long = {
+    abs((minuend-subtrahend))
+  }
+
 }
