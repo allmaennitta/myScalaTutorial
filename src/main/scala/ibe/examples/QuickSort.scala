@@ -37,10 +37,13 @@ object QuickSort {
       val pivot = xs(xs.length / 2)
       println(s"pivot: ${pivot} (${xs.mkString})")
 
-      Array.concat(
-        quicksortFunctional(xs filter (pivot >)),
-                            xs filter (pivot ==),
-        quicksortFunctional(xs filter (pivot <)))
+      val arrGT = quicksortFunctional(xs filter (pivot >))
+      println(s"arrGT: ${arrGT.mkString}")
+      val valEqu = xs filter (pivot ==)
+      println(s"EQ: ${valEqu.mkString}")
+      val arrLT = quicksortFunctional(xs filter (pivot <))
+      println(s"arrLT: ${arrLT.mkString}")
+      Array.concat(arrGT, valEqu, arrLT)
     }
   }
 }
