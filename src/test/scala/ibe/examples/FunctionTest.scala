@@ -2,104 +2,131 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-import scala.collection.mutable
-import scala.util.control.Breaks
-
 /**
   * Created by ingo on 26.09.2016.
   */
 class FunctionTest extends FunSpec with Matchers {
 
-  describe("In Scala") {
-    it("a tuple of values can be returned") {
-      def returnPair() = {
-        val x = 42
-        val y = "The answer to all questions"
-        (x, y)
-      }
+  describe("In Scala a function") {
+    def time() = {
+      System.currentTimeMillis()
+    }
 
-      val (myInt: Int, myString: String) = returnPair
-      myInt should not be (43)
-      myInt should be(42)
-      myString should be("The answer to all questions")
+    def delayed(t: => Long) = {
+      Thread sleep 10
+      t
+    }
+
+    it("evaluates its params immedately") {
+      val start = System.currentTimeMillis()
+      val end = time()
+      (end - start) should be < 5L
+    }
+
+    it("is evaluates its params lazily 'call-by-name'") {
+      val start = System.currentTimeMillis()
+      val end = delayed(time())
+      (end - start) should (be >= 10L and be <= 15L)
     }
   }
 
-  it("a loop is breakable... in a slightly strange way") {
-    class Thingy(myval: Int = 0) {
-      def getValue = myval
-
-      override def toString(): String = {
-        "Thingy: " + myval
+  describe("In Scala a function") {
+    it("has named params") {
+      def division(dnd: Int, dor: Int): Double = {
+        return dnd / dor
       }
+      (division(dor = 5, dnd = 10)) should not be (0.5)
+      (division(dor = 5, dnd = 10)) should be(2)
+    }
+    it("has named params and defaults") {
+      def division(dnd: Int = 10, dor: Int = 5): Double = {
+        return dnd / dor
+      }
+      division() should not be (0.5)
+      division() should be(2)
     }
 
-    val indexes = List(1, 2, 3, 4, 5)
-    var result = mutable.ListBuffer[Thingy]()
+    it("has a variable number of params") {
+      def concatTxt(fragments: String*): String = {
+        var phrase: String = ""
+        for (f <- fragments) {
+          phrase += f
+        }
+        return phrase
+      }
 
-    val loop = new Breaks;
-    loop.breakable {
-      for (a <- indexes) {
-        println("Value of a: " + a)
-        result += new Thingy(a)
-        if (a == 3) {
-          loop.break
+      val result = concatTxt("super", "cale", "frage", "listig", "exqui", "ale", "gorisch")
+      result should be("supercalefragelistigexquialegorisch")
+    }
+
+    it("can call itself recursively and reverse letters") {
+      def reverseString(word : String) : String =  {
+        if(word == null || word.equals("")){
+          return word;
+        } else {
+          val nextIterationWord = word.substring(1, word.length())
+          val firstLetter = word.substring(0, 1)
+          println(nextIterationWord + firstLetter)
+          return reverseString(nextIterationWord) + firstLetter
         }
       }
+
+      (reverseString("Reliefpfeiler")) should be ("reliefpfeileR")
+      (reverseString("Ingo")) should be ("ognI")
     }
-    val resultList = result.toList
-    println("resultList: " + resultList)
-    resultList.last.getValue should be(3)
-  }
 
-  it("for-loops are fun") {
-    var x = 0
-    for (a <- 1 to 3) {
-      x += a
+    it("can call itself recursively and remove duplicates") {
+      def removeDuplicates(word : String) : String =  {
+        if(word == null || word.length() <= 1)
+          return word;
+        else if( word.charAt(0) == word.charAt(1) )
+          return removeDuplicates(word.substring(1, word.length()));
+        else
+          return word.charAt(0) +
+            removeDuplicates(word.substring(1, word.length()));
+      }
+      (removeDuplicates("Azziiiiiizaaaaaam, kheiiiiliii dussssset daraaaaaam!")) should be ("Azizam, kheili duset daram!")
     }
-    x should be(6)
-  }
 
-  it("for loops can have more than one iteration") {
-    val results = mutable.Stack(2, 3, 3, 4)
-    var sum = 0
-    for (a <- 1 until 3; b <- 1 to 2) {
-      println(s"a: $a and b: $b")
-      (a + b) should be(results.pop())
-      sum += (a + b)
+    it("can be a higher-order function"){
+      def apply(f: Int => String, v: Int) = f(v)
+      def layout[A](x: A) = "[" + x.toString()+ "]"
+
+      apply(layout, 10) should be ("[10]")
     }
-    sum should be(12)
-  }
 
-  it("for loops can can have a collection as source") {
-    val myList = List("hund", "katze", "maus")
+    it("can be a anonymous function"){
+      //anonymous functions in source code are called function literals
+      //at runtime they are instantiated in objects called function values
+      var inc = (x:Int) => x+1
+      inc(7)-1 should be (7)
 
-    for (txt <- myList) {
-      println(txt)
-      txt should contain oneOf("hund", "katze", "maus")
+      var mul = (x:Int, y: Int) => x*y
+      mul(3,4) should be (12)
+
+      println(System.getProperty("user.home"))
+      var userDir = () => {System.getProperty("user.home")}
+      userDir() should be ("/Users/ibeyerlein")
     }
-  }
 
-  it("for loops can be limited by filters") {
-    val a : Int = 0
-    val results = mutable.Stack(6, 12)
-    val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-    for (a <- myList
-         if a % 2 == 0;
-         if a % 3 == 0) {
-           println(a)
-           a should be (results.pop())
+    it("can be a applied partially"){
+      //anonymous functions in source code are called function literals
+      //at runtime they are instantiated in objects called function values
+      def log(date : String, message : String): String ={
+        return s"$date ----- $message"
+      }
+
+      val partialLog = log("12:24:00", _ : String)
+      partialLog("hallooo") should be ("12:24:00 ----- hallooo")
+      partialLog("xyz") should be ("12:24:00 ----- xyz")
     }
-  }
 
-  it("for loops can be used like filter- and map statements") {
-    val a : Int = 0
-    val expected = mutable.Stack(12, 24)
-    val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-    val results =
-      for (a <- myList
-         if a % 2 == 0;
-         if a % 3 == 0)yield a*2
-    results should be (expected)
+    it("can be curried"){
+      def strcat1(s1: String) (s2: String) = s1 + s2
+      def strcat2(s1: String) = (s2: String) => s1 + s2
+
+      strcat1("foo") ("bar") should be ("foobar")
+      strcat2("foo") ("bar") should be ("foobar")
+    }
   }
 }
