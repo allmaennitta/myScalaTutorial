@@ -30,20 +30,20 @@ object QuickSort {
 
   def quicksortFunctional(xs: Array[Int]): Array[Int] = {
     println(s"Initial: ${xs.mkString}")
-    if (xs.length <= 1) {
+    if (xs.length <= 1) {                   //Trivialer Fall
       println(s"length1: ${xs.mkString}")
-      xs
+      xs                                    //Bei einem einzelnen Element wird das Element zurückgegeben
     } else {
-      val pivot = xs(xs.length / 2)
+      val pivot = xs(xs.length / 2)         //Wahl eines mittigen Pivot-Elements aus der Liste
       println(s"pivot: ${pivot} (${xs.mkString})")
 
-      val arrGT = quicksortFunctional(xs filter (pivot >))
+      val arrGT = quicksortFunctional(xs filter (pivot >)) //Wiederholung für alle Werte, die größer sind
       println(s"arrGT: ${arrGT.mkString}")
-      val valEqu = xs filter (pivot ==)
+      val valEqu = xs filter (pivot ==)     //Liste der Werte, die gleich dem Pivot sind
       println(s"EQ: ${valEqu.mkString}")
-      val arrLT = quicksortFunctional(xs filter (pivot <))
+      val arrLT = quicksortFunctional(xs filter (pivot <))  //Wiederholung für alle Werte, die kleiner sind
       println(s"arrLT: ${arrLT.mkString}")
-      Array.concat(arrGT, valEqu, arrLT)
+      Array.concat(arrGT, valEqu, arrLT) //Verknüpfung der kleineren, gleichgroßen, größeren Wertlisten
     }
   }
 }

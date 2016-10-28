@@ -5,7 +5,7 @@ import org.scalatest.{FunSuite, Matchers}
 /**
   * Created by ingo on 26.09.2016.
   */
-class ComplexTest extends FunSuite  with Matchers  {
+class _03_ComplexTest extends FunSuite  with Matchers  {
 
   test("testToString") {
     val c = new Complex(0.5, 0.4)

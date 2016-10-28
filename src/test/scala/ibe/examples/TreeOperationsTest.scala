@@ -2,9 +2,6 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-/**
-  * Created by ingo on 27.09.2016.
-  */
 class TreeOperationsTest extends FunSpec with Matchers {
 
   describe("TreeOperations$Test") {

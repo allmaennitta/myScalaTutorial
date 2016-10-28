@@ -8,10 +8,10 @@ import org.scalatest.{FunSpec, Matchers}
 /**
   * Created by ingo on 26.09.2016.
   */
-class TimerTest extends FunSpec with Matchers {
+class _02_TimerTest extends FunSpec with Matchers {
   var dateArr = Array.empty[Long]
 
-  describe("TimerTest") {
+  describe("Timer") {
     it("should execute 3 times with an interval of 500ms") {
       val repetitions = 3
       val pauseInterval = 500 //ms

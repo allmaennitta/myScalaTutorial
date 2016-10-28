@@ -2,11 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Ignore, Matchers}
 
-/**
-  * @author ibeyerlein
-  * @date 26.09.16
-  */
-class QuickSortTest extends FunSpec with Matchers {
+class _06_Comparison_Iterative_Recursive_With_QuickSort extends FunSpec with Matchers {
 
   describe("A QuickSortTest") {
 
