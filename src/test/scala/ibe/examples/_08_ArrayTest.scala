@@ -6,6 +6,15 @@ import Array._
 class _08_ArrayTest extends FunSpec with Matchers {
 
   describe("An Array"){
+    it("can append new elements"){
+      var myArr = Array(1,2,3)
+      myArr = 44 +: myArr :+ 55
+      myArr should be(Array(44,1,2,3,55))
+
+      //consider using ArrayBuffer for appending new elements
+    }
+
+
     it ("can be created and processed in various ways") {
       val withTypeAndSize = new Array[Int](3)
       withTypeAndSize.toList.toString should be ("List(0, 0, 0)")
@@ -59,9 +68,8 @@ class _08_ArrayTest extends FunSpec with Matchers {
       var myStep1Arr = range(15,20)
 
       for (i <- myStep3Arr) {
-
+        i % 3 should be (0)
       }
-
     }
   }
 }
