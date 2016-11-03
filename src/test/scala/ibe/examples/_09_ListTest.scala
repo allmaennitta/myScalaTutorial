@@ -39,29 +39,36 @@ class _09_ListTest extends FunSpec with Matchers {
       matrixLists should be(matrixArrays)
     }
 
-    it("has some interesting options to operate with.") {
+    it("can be constructed and noted in various ways"){
       Nil should be(List())
       val listNum = (1 :: (2 :: (3 :: Nil)))
       listNum should be(List(1, 2, 3))
 
       val listFruit = List("apple", "cherry", "pear")
-      val combineList_as_regular_function_call = listNum.:::(listFruit)
-      val combineList_as_suffix_notation = listNum ::: listFruit //which makes it pretty expressive :)
 
-      combineList_as_regular_function_call should be(List("apple", "cherry", "pear", 1, 2, 3)) //don't know why it is
-      // "reversed" this way
-      combineList_as_suffix_notation should be(List(1, 2, 3, "apple", "cherry", "pear"))
+      listNum.:::(listFruit) should be(List("apple", "cherry", "pear", 1, 2, 3))  //don't know why it is
+                                                                                  // "reversed" this way
+      listNum ::: listFruit should be(List(1, 2, 3, "apple", "cherry", "pear")) //which makes it pretty expressive :)
+
+      //pay attention to
+      listNum :: listFruit should be (List(List(1,2,3),"apple", "cherry", "pear"))
+      3 :: 2 :: 1 :: Nil should be (List(3, 2, 1))
+
+      List(1,2,3,4).mkString("[",",","]") should be ("[1,2,3,4]")
+    }
+
+    it("has some interesting options to operate with.") {
+      val listNum = List(1, 2, 3)
+      val listFruit = List("apple", "cherry", "pear")
 
       List.concat(listNum, listFruit) should be(List(1, 2, 3, "apple", "cherry", "pear"))
 
-      listFruit.head should be("apple")
-      listFruit.tail should be(List("cherry", "pear"))
+      listFruit.head should be ("apple")
+      listFruit.tail should be (List("cherry", "pear"))
+      listFruit.init should be (List("apple", "cherry"))
+      listFruit.last should be ("pear")
 
       List.fill(3)("apples") should be(List("apples", "apples", "apples")) //fill list 3 times with "apples"
-      List.tabulate(6)(n => n * n) should be(List(0, 1, 4, 9, 16, 25))
-      List.tabulate(5)(_ + 2) should be(List(2, 3, 4, 5, 6))
-      List.tabulate(2, 3)(_ + 3 * _) should be(List(List(0, 3, 6), List(1, 4, 7))) //first _+ seems to be only there for
-      //validity-reasons 3*_ is calculated
       listFruit.reverse should be(List("pear", "cherry", "apple"))
 
       //List(1,2) + 3 isn't supported anymore because it takes much more time than prepending with :: and reversing
@@ -72,6 +79,9 @@ class _09_ListTest extends FunSpec with Matchers {
 
       listNum.dropRight(1) should be(List(1, 2))
       listNum.drop(1) should be(List(2, 3))
+
+      List(2,6,3,1,4).max should be (6)
+      List(2,6,3,1,4).min should be (1)
     }
   }
 
@@ -99,11 +109,13 @@ class _09_ListTest extends FunSpec with Matchers {
     it("can be processed in a variety of ways") {
       val balloons = (new ArrayBuffer[Balloon]
         :+ new Balloon("g", false)
-        :+ new Balloon("r", true)
         :+ new Balloon("y", true)
         :+ new Balloon("r", true)
         :+ new Balloon("g", true)
-        :+ new Balloon("r", false)).toList
+        :+ new Balloon("r", false)
+        :+ new Balloon("r", true)).toList
+
+      printf("Original balloons:%n%s%n", balloons)
 
       balloons.exists(
         (b: Balloon) => b.color == "y" && b.filled == true
@@ -131,12 +143,35 @@ class _09_ListTest extends FunSpec with Matchers {
 
       def isRed(b: Balloon) : Boolean = (b.color=="r")
       val justRed = balloons.filter(isRed)
-      println(justRed)
+      printf("Red balloons:%n%s%n", justRed)
+
       justRed.forall(isRed) should be (true)
 
-      //balloons.
+      var countFilled: Int = 0
+      for (l <- justRed.permutations){
+        for (balloon <- l) {
+          println(balloon)
+          if (balloon.filled == true) countFilled +=1
+        }
+        println("------")
+      }
+      countFilled should be (6) //with 3 permutation groups and 2 filled per group
+    }
 
-      //TODO dropWhile takeWhile ...
+    it("can be processed even in a way that is much more adequate for iterators"){
+      val justRed = (new ArrayBuffer[Balloon]
+        :+ new Balloon("r", true)
+        :+ new Balloon("r", false)
+        :+ new Balloon("r", true)).toList
+
+      justRed.dropWhile((b: Balloon) => b.filled == true) should be (List(
+        new Balloon("r", false),
+        new Balloon("r", true)
+      ))
+
+      justRed.takeWhile((b: Balloon) => b.filled == true) should be (List(
+        new Balloon("r", true)
+      ))
     }
   }
 
@@ -144,7 +179,12 @@ class _09_ListTest extends FunSpec with Matchers {
     * Example by https://www.garysieling.com/blog/scala-collect-example
     */
   describe("Special functions like") {
-    it("'collect' can help to transform lists in an easy way") {
+    it("'tabulate' and 'collec' help to transform lists in an easy way"){
+      List.tabulate(6)(n => n * n) should be(List(0, 1, 4, 9, 16, 25))
+      List.tabulate(5)(_ + 2) should be(List(2, 3, 4, 5, 6))
+      List.tabulate(2, 3)(_ + 3 * _) should be(List(List(0, 3, 6), List(1, 4, 7))) //first _+ seems to be only there for
+      //validity-reasons 3*_ is calculated
+
       /** converts a limited amount of data types into Int. Ignores other data types **/
       val convertFn: PartialFunction[Any, Int] = {
         case i: Int => i;
@@ -165,8 +205,7 @@ class _09_ListTest extends FunSpec with Matchers {
     it("'union', 'intersection' and 'difference' help to do it the 'Venn' way"){
       List(1,3).union(List(2,3)) should be ((List(1,3,2,3)))
       List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
+      List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
     }
-
   }
-
 }
