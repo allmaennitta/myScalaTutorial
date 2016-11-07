@@ -13,12 +13,12 @@ class _09_ListTest extends FunSpec with Matchers {
       List().isEmpty should be(true)
     }
 
-    it("can append new elements") {
+    it("can append elements resulting in a new list") {
       var myList = List(1, 2, 3)
       myList = 44 +: myList :+ 55
       myList should be(List(44, 1, 2, 3, 55))
-
       //=> consider using ArrayBuffer for appending new elements
+
     }
 
     it("can be multidimensional") {
@@ -82,6 +82,8 @@ class _09_ListTest extends FunSpec with Matchers {
 
       List(2,6,3,1,4).max should be (6)
       List(2,6,3,1,4).min should be (1)
+
+      "hello world".count(_ == 'o') should be (2)
     }
   }
 
