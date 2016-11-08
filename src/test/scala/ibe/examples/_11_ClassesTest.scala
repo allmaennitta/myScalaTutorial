@@ -2,7 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class ClassesTest extends FunSpec with Matchers {
+class _11_ClassesTest extends FunSpec with Matchers {
 
   describe("A class has constructor args and ") {
     trait SomethingToSay {
@@ -49,7 +49,7 @@ class ClassesTest extends FunSpec with Matchers {
       //myClass.bar("uiuiui") //=> just Int-function offered to get position of char-array
       //myShorterClass.bar("uiuiui") //=> bar is not even visible from outside
 
-      myClass.bar(1) should be("e") //doesn't change the string, but treats string as array and returns char at pos 1
+      myClass.bar(1) should be('e') //doesn't change the string, but treats string as array and returns char at pos 1
     }
 
     it("has a just readable field") {
@@ -66,11 +66,11 @@ class ClassesTest extends FunSpec with Matchers {
       val myBar = new MyClass()
       myBar.getBar should be("meeeh")
       //myBar.bar should be("meeeh") => inaccessible
-      myBar.getBar(1) should be("e") //doesn't change the string, but treats string as array and returns char at pos 1
+      myBar.getBar(1) should be('e') //doesn't change the string, but treats string as array and returns char at pos 1
     }
   }
 
-  describe("A class") {
+  describe("A Point-class") {
     /** *
       * A simple point class
       *
@@ -139,7 +139,7 @@ class ClassesTest extends FunSpec with Matchers {
       pt.toString() should be("Point is at x: 2 and y: 2.")
     }
 
-    it("can be extended to a 3dimensional location") {
+    it("can be extended to a 3dimensional Location by sub-classing") {
       val loc = new Location(0, 0, 0)
       loc.toString() should be("Location is at x: 0, y: 0, z: 0.")
       loc.move(2, 2, 2)
