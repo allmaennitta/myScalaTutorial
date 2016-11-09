@@ -33,6 +33,7 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
   }
 
   describe("A person matcher"){
+    case class Person(name: String, age: Int) //NOTHING MORE has to be declared for the code below to work
     val hans = new Person ("Hans", 22)
     val takeshi = new Person ("Takeshi", 27)
 

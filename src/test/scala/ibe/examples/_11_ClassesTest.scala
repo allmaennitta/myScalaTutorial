@@ -167,7 +167,27 @@ class _11_ClassesTest extends FunSpec with Matchers {
       MyString("hello").toString should be("hello")
 
     }
+  }
+  describe("A case class"){
+    case class Dog(color : String = "brown", race : String = "terrier" ){
+      def bark(): String = {s"I'm a $color $race"}
+    }
+    it("is a normal per default immutable class with built-in hash/equals/toString per fields"){
+      val leo = Dog() //no new necessary
+      val fiffi = Dog("brown", "terrier")
+      leo.bark() should be ("I'm a brown terrier")
+      leo.toString should be ("Dog(brown,terrier)")
+      leo.color should be ("brown")
+      leo should be (fiffi) //hash and equals by fields is already built-in
+      //leo.color = "white" //=> reassignment to val
+    }
 
+    it("can be modified best by simply copying"){
+      val maxi = Dog(color = "yellow", race = "boxer")
+      val urs = maxi.copy(race = "pintcher")
+      maxi should not be (urs)
+      urs.race should be ("pintcher")
+    }
   }
 
 }
