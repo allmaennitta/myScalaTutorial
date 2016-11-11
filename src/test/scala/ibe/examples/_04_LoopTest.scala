@@ -88,5 +88,16 @@ class _04_LoopTest extends FunSpec with Matchers {
              if a % 3 == 0) yield a * 2
       results should be(expected)
     }
+
+    it("with for and zipWithIndex value und index can be processed at the same time"){
+      val a = List("a", "b", "c")
+      val result = List("0 is a", "1 is b","2 is c")
+
+      for ((e, count) <- a.zipWithIndex) {
+        s"$count is $e" should be (result(count))
+      }
+    }
+
+
   }
 }

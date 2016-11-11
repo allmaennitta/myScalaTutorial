@@ -33,20 +33,24 @@ class _15_Extractor extends FunSpec with Matchers {
   }
   describe("An extractor object used by a match") {
 
-    object Test {
+    object Twice {
+      /***
+        * Injector should be the "uncritical operation. Every number can be multiplicated
+        * or every email (even if not valid) can be composed out of two parts and an @ in the middle
+        */
       def apply(x: Int) = x * 2
 
+      /**
+        * Extractor is the inverse "critical" operation, with the result that the output must be an Option
+        */
       def unapply(z: Int): Option[Int] = if (z % 2 == 0) Some(z / 2) else None
     }
 
-    it("uses unapplying / extraction for matching") {
-      def isBiggerThan(int : Int) : String = Test(int) match {
-        case Test(num) => Test(int) +" is bigger two times than "+num
-        case _ => "cannot calculate"
-      }
 
-      isBiggerThan(Test(5)) should be ("20 is bigger two times than 10")
-      Test(10) should be (20)
+    it("uses unapplying / extraction for matching") {
+      val x = Twice(21)
+      x should be (42)
+      x match { case Twice(n) => n should be (21) }
     }
 
   }

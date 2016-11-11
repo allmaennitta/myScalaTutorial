@@ -84,6 +84,13 @@ class _09_ListTest extends FunSpec with Matchers {
       List(2,6,3,1,4).min should be (1)
 
       "hello world".count(_ == 'o') should be (2)
+
+      def sumWithReduce(ints: List[Int]) = {
+        ints.reduceLeft(_ + _)
+      }
+
+      sumWithReduce(List(1,3,9)) should be (13)
+
     }
   }
 
@@ -209,5 +216,6 @@ class _09_ListTest extends FunSpec with Matchers {
       List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
       List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
     }
+
   }
 }
