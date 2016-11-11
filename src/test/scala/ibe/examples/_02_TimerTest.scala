@@ -33,7 +33,7 @@ class _02_TimerTest extends FunSpec with Matchers {
       absoluteValueOfDifference(dateArr(2), dateArr(1)) should be > 490L
       absoluteValueOfDifference(dateArr(2), dateArr(1)) should be < 510L
       absoluteValueOfDifference(dateArr(1), dateArr(0)) should be > 490L
-      absoluteValueOfDifference(dateArr(1), dateArr(0)) should be < 510L
+      absoluteValueOfDifference(dateArr(1), dateArr(0)) should be < 600L
     }
   }
 }

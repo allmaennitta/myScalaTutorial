@@ -2,6 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
+import scala.collection.immutable.Queue
 import scala.collection.mutable
 
 class _10_Collection_Others_Test extends FunSpec with Matchers {
@@ -148,7 +149,52 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
         if (loriterator.hasNext) citation ++= " "
       }
       citation.result() should be("ein leben ohne mops ist möglich aber sinnlos")
-
     }
+  }
+  describe ("A Queue"){
+    it("works FIFO"){
+      var queue = mutable.Queue[Int]()
+      queue.enqueue(1)
+      queue.enqueue(3, 5, 7)
+      queue should be (Queue(1,3,5,7))
+      queue.head should be (1)
+      queue.head should be (1) //head is not popped
+      queue.last should be (7)
+      queue.dequeue() should be (1)
+      queue.head should be (3)
+    }
+  }
+
+  /**
+    * A Tree (here not the built-in version) is an easily composable data type due to matching, etc.
+    */
+
+  describe("A Tree") {
+    abstract class Tree
+    case class Sum(l: Tree, r: Tree) extends Tree
+    case class Var(n: String) extends Tree
+    case class Const(v: Int) extends Tree
+
+    type Environment = String => Int
+
+    object Tree {
+      def eval(t: Tree, env: Environment): Int = t match {
+        case Sum(l, r) => eval(l, env) + eval(r, env)
+        case Var(n) => env(n)
+        case Const(v) => v
+      }
+    }
+
+    it("should eval") {
+      val exp: Tree = Sum(Sum(Var("x"), Var("x")),Sum(Const(7), Var("y")))
+      val env: Environment = {
+        case "x" => 1
+        case "y" => 2
+      }
+
+      println("Expression: " + exp)
+      Tree.eval(exp, env) should be (11)
+    }
+
   }
 }

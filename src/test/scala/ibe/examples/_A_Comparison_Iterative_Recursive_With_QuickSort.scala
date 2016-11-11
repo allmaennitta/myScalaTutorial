@@ -2,7 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Ignore, Matchers}
 
-class Comparison_Iterative_Recursive_With_QuickSort extends FunSpec with Matchers {
+class _A_Comparison_Iterative_Recursive_With_QuickSort extends FunSpec with Matchers {
 
   describe("A imperative QuickSort algorithm") {
     def quicksortImperative(xs: Array[Int]) {

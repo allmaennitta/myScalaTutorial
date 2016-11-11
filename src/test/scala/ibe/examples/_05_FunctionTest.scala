@@ -27,7 +27,7 @@ class _05_FunctionTest extends FunSpec with Matchers {
       val start = System.currentTimeMillis()
       val end = delayed(time())
 
-      (end - start) should (be >= 10L and be <= 15L)
+      (end - start) should (be >= 10L and be <= 20L)
     }
   }
 

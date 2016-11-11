@@ -1,17 +1,13 @@
 name := "places"
 version := "1.0"
 scalaVersion := "2.11.8"
-sbtVersion := "0.13.9"
+sbtVersion := "0.13.13"
 
 
-val vTomcat: String = "8.5.6"
+val vTomcat: String = "8.0.30"
 val vScalaTest: String = "3.0.0"
 val vAkka: String = "2.4.10"
 val vSpringBoot: String = "1.3.2.RELEASE"
-
-
-enablePlugins(TomcatPlugin)
-
 
 libraryDependencies ++= Seq(
   //UNIT-TESTING
@@ -27,15 +23,18 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-data-jpa" % vSpringBoot,
   "org.springframework.boot" % "spring-boot-starter-tomcat" % vSpringBoot % "provided",
 
-  "ch.qos.logback" % "logback-classic" % "1.0.9",
-  "org.webjars" % "bootstrap" % "3.1.1",
-  "org.thymeleaf" % "thymeleaf-spring4" % "2.1.2.RELEASE",
-  "nz.net.ultraq.thymeleaf" % "thymeleaf-layout-dialect" % "1.2.1",
-  "org.hsqldb" % "hsqldb" % "2.3.1",
-  "org.hibernate" % "hibernate-validator" % "5.0.2.Final",
-  "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
+  "ch.qos.logback"  % "logback-classic" % "1.0.9",
+  "org.webjars"     % "bootstrap" % "3.1.1",
+  "org.thymeleaf"   % "thymeleaf-spring4" % "2.1.2.RELEASE",
+  "nz.net.ultraq.thymeleaf"     % "thymeleaf-layout-dialect" % "1.2.1",
+  "org.hsqldb"      % "hsqldb" % "2.3.1",
+  "org.hibernate"   % "hibernate-validator" % "5.2.2.Final",
+  "javax.servlet"   % "javax.servlet-api" % "3.0.1" % "provided",
 
   "org.apache.tomcat.embed" % "tomcat-embed-core"         % vTomcat % "container",
+  "org.apache.tomcat.embed" % "tomcat-embed-el"           % vTomcat % "container",
   "org.apache.tomcat.embed" % "tomcat-embed-logging-juli" % vTomcat % "container",
   "org.apache.tomcat.embed" % "tomcat-embed-jasper"       % vTomcat % "container"
 )
+
+enablePlugins(TomcatPlugin)
