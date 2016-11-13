@@ -2,6 +2,8 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
+import scala.language.implicitConversions
+
 class _18_Implicits extends FunSpec with Matchers {
 
   /** *
@@ -19,7 +21,7 @@ class _18_Implicits extends FunSpec with Matchers {
       greet should be("Hello, 007!")
     }
     it("can be converted if there is an implic converter present") {
-      implicit def agentCodename(i: Int) = s"00$i" //converts int to string
+      implicit def agentCodename(i: Int) : String = s"00$i" //converts int to string
 
       def hello(name: String) = s"Hello, $name!" //takes string
 

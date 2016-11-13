@@ -39,25 +39,25 @@ class _05_FunctionTest extends FunSpec with Matchers {
         (x, y)
       }
 
-      val (myInt: Int, myString: String) = returnPair
-      myInt should not be (43)
+      val (myInt: Int, myString: String) = returnPair()
+      myInt should not be 43
       myInt should be(42)
       myString should be("The answer to all questions")
     }
 
   it("has named params") {
       def division(dnd: Int, dor: Int): Double = {
-        return dnd / dor
+        dnd / dor
       }
-      (division(dor = 5, dnd = 10)) should not be (0.5)
-      (division(dor = 5, dnd = 10)) should be(2)
+      division(dor = 5, dnd = 10) should not be 0.5
+      division(dor = 5, dnd = 10) should be(2)
     }
 
     it("has named params and defaults") {
       def division(dnd: Int = 10, dor: Int = 5): Double = {
-        return dnd / dor
+       dnd / dor
       }
-      division() should not be (0.5)
+      division() should not be 0.5
       division() should be(2)
     }
 
@@ -67,7 +67,7 @@ class _05_FunctionTest extends FunSpec with Matchers {
         for (f <- fragments) {
           phrase += f
         }
-        return phrase
+        phrase
       }
 
       val result = concatTxt("super", "cale", "frage", "listig", "exqui", "ale", "gorisch")
@@ -76,36 +76,34 @@ class _05_FunctionTest extends FunSpec with Matchers {
 
     it("can call itself recursively and reverse letters") {
       def reverseString(word : String) : String =  {
-        if(word == null || word.equals("")){
-          return word;
+        if(word == null || word.equals("")){ word
         } else {
           val nextIterationWord = word.substring(1, word.length())
           val firstLetter = word.substring(0, 1)
           println(nextIterationWord + firstLetter)
-          return reverseString(nextIterationWord) + firstLetter
+          reverseString(nextIterationWord) + firstLetter
         }
       }
 
-      (reverseString("Reliefpfeiler")) should be ("reliefpfeileR")
-      (reverseString("Ingo")) should be ("ognI")
+      reverseString("Reliefpfeiler") should be ("reliefpfeileR")
+      reverseString("Ingo") should be ("ognI")
     }
 
     it("can call itself recursively and remove duplicates") {
       def removeDuplicates(word : String) : String =  {
         if(word == null || word.length() <= 1)
-          return word;
+          word
         else if( word.charAt(0) == word.charAt(1) )
-          return removeDuplicates(word.substring(1, word.length()));
+          removeDuplicates(word.substring(1, word.length()))
         else
-          return word.charAt(0) +
-            removeDuplicates(word.substring(1, word.length()));
+          word.charAt(0) + removeDuplicates(word.substring(1, word.length()))
       }
-      (removeDuplicates("Azziiiiiizaaaaaam, kheiiiiliii dussssset daraaaaaam!")) should be ("Azizam, kheili duset daram!")
+      removeDuplicates("Azziiiiiizaaaaaam, kheiiiiliii dussssset daraaaaaam!") should be ("Azizam, kheili duset daram!")
     }
 
     it("can be a higher-order function"){
       def apply(f: Int => String, v: Int) = f(v)
-      def layout[A](x: A) = "[" + x.toString()+ "]"
+      def layout[A](x: A) = "[" + x.toString + "]"
 
       apply(layout, 10) should be ("[10]")
     }
@@ -121,14 +119,14 @@ class _05_FunctionTest extends FunSpec with Matchers {
 
       println(System.getProperty("user.home"))
       var userDir = () => {System.getProperty("user.home")}
-      userDir() should (fullyMatch regex ("""(/Users/ibeyerlein|C:\\Users\\ingo)""".r))
+      userDir() should fullyMatch regex """(/Users/ibeyerlein|C:\\Users\\ingo)""".r
     }
 
     it("can be applied partially"){
       //anonymous functions in source code are called function literals
       //at runtime they are instantiated in objects called function values
       def log(date : String, message : String): String ={
-        return s"$date ----- $message"
+        s"$date ----- $message"
       }
 
       val partialLog = log("12:24:00", _ : String)
@@ -168,7 +166,7 @@ class _05_FunctionTest extends FunSpec with Matchers {
         else filter(xs.tail, p) //nächster wert
       }
 
-      def modN(n: Int)(x: Int) = ((x % n) == 0) //when rest of division is 0 => x is divisible by n
+      def modN(n: Int)(x: Int) = (x % n) == 0 //when rest of division is 0 => x is divisible by n
 
     }
 

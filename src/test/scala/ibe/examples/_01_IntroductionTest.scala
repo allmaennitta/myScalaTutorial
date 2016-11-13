@@ -11,14 +11,17 @@ class _01_IntroductionTest extends FunSpec with Matchers {
   describe("An example Salut Monde app") {
 
     object SalutMonde {
-      def main(args: Array[String]): Unit = {
-        execute()
-      } //the scala equivalent of public static void main
+        /**
+        *the scala equivalent of public static void main
+        */
+//      def main(args: Array[String]): Unit = {
+//        execute()
+//      }
 
       def execute(): String = {
         val now = new Date
         val df = getDateInstance(LONG, Locale.FRANCE)
-        "Salut, monde, " + df.format(now).toString()
+        "Salut, monde, " + df.format(now)
       }
     }
 
@@ -34,7 +37,7 @@ class _01_IntroductionTest extends FunSpec with Matchers {
       def im = imaginary //directly taken from params
       def re = real //not sure if you really should do that. Without var statement the values are just readable anyway
 
-      override def toString(): String = // : String could be omitted because it is deduced
+      override def toString : String = // : String could be omitted because it is deduced
       "" + re + (if (im < 0) "" else "+") + im + "i" //no return necessary, the last value is the one taken
     }
 

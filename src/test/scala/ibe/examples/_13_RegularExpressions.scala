@@ -25,8 +25,8 @@ class _13_RegularExpressions extends FunSpec with Matchers {
     }
     it("uses Java Regexp syntax") {
       val txt = "Robe und Rebe bringen Reibereien mit sich."
-      ("\\w{2,3}be".r).findAllIn(txt).mkString(",") should be("Robe,Rebe,Reibe")
-      (("(Ro|Re|Rei)be").r).findAllIn(txt).mkString(",") should be("Robe,Rebe,Reibe")
+      "\\w{2,3}be".r findAllIn txt.mkString(",") should be("Robe,Rebe,Reibe")
+      "(Ro|Re|Rei)be".r findAllIn txt.mkString(",") should be("Robe,Rebe,Reibe")
     }
     it("can be tested with special syntax") {
       "Hello World" should include regex "(W|w)o.ld".r

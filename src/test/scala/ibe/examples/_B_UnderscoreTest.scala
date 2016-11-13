@@ -1,7 +1,9 @@
 package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
+import scala.language.higherKinds
 
+//noinspection ConvertibleToMethodValue
 class _B_UnderscoreTest extends FunSpec with Matchers {
 
   describe("Underscore") {
@@ -10,7 +12,7 @@ class _B_UnderscoreTest extends FunSpec with Matchers {
       //Existential types
       //http://stackoverflow.com/questions/15186520/scala-any-vs-underscore-in-generics
       def foo(l: List[Option[_]]) = l //In List-case it is equal to "Any"... but not with a Set
-      foo(List(Option(1), Option(2)))(0).getOrElse(0) should be(1)
+      foo(List(Option(1), Option(2))).head.getOrElse(0) should be(1)
 
       //Higher kinded type parameters
       case class A[K[_], T](a: K[T]) //Compiler needs not to know of which type K may be

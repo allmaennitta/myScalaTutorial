@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.{Bean, Configuration}
 
 object SpringBoot extends App {
-  val ctx = SpringApplication.run(classOf[Config]);
+  val ctx = SpringApplication.run(classOf[Config])
 
   def foo = ctx.getBean("helloWorld").asInstanceOf[HelloWorld].foo
 
@@ -15,6 +15,6 @@ object SpringBoot extends App {
 @EnableAutoConfiguration
 class Config(){
   @Bean
-  def helloWorld = new HelloWorld()
+  def helloWorld = HelloWorld()
 
 }

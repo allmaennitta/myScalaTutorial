@@ -6,18 +6,18 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
   describe("A class has constructor args and ") {
     trait SomethingToSay {
-      def getTxt(): String
+      def getTxt : String
     }
 
     abstract class ClassWithConstructor() extends SomethingToSay {
-      override def toString(): String = {
-        ("I say " + this.getTxt())
+      override def toString: String = {
+        "I say " + this.getTxt
       }
     }
 
     it("has a mutable and outside visible field") {
       class MyClass(var bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt(): String = this.bar
+        override def getTxt : String = this.bar
       }
 
       val myClass = new MyClass
@@ -32,12 +32,12 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
     it("has a final field") {
       class MyClass(val bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt(): String = this.bar
+        override def getTxt : String = this.bar
 
         // def setBar(txt : String){this.bar = txt} // reassignment to val
       }
       class MyShorterClass(bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt(): String = this.bar
+        override def getTxt : String = this.bar
 
         // def setBar(txt : String){this.bar = txt} // reassignment to val
       }
@@ -56,7 +56,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
       class MyClass(var initial_bar: String = "meeeh") extends ClassWithConstructor {
         private val bar = initial_bar
 
-        override def getTxt(): String = this.bar
+        override def getTxt : String = this.bar
 
         def getBar = bar
       }
@@ -77,6 +77,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
       * @param init_x
       * @param init_y
       */
+    //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
     class Point(val init_x: Int, val init_y: Int) extends Equal {
       protected var x = init_x
       protected var y = init_y
@@ -90,7 +91,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
         y = y + dy
       }
 
-      override def toString(): String = {
+      override def toString : String = {
         //<= please pay attention to "override"-keyword
         s"Point is at x: $x and y: $y."
       }
@@ -106,6 +107,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
       * @param init_y
       * @param init_z
       */
+    //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
     class Location(override val init_x: Int,
                    override val init_y: Int,
                    val init_z: Int) extends Point(init_x, init_y) {
@@ -117,7 +119,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
         z = z + dz
       }
 
-      override def toString(): String = {
+      override def toString : String = {
         //<= please pay attention to "override"-keyword
         s"Location is at x: $x, y: $y, z: $z."
       }
@@ -200,7 +202,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
     it("can be modified best by simply copying"){
       val maxi = Dog(color = "yellow", race = "boxer")
       val urs = maxi.copy(race = "pintcher")
-      maxi should not be (urs)
+      maxi should not be urs
       urs.race should be ("pintcher")
     }
   }

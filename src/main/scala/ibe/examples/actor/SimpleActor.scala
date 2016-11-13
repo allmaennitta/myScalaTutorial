@@ -7,11 +7,10 @@ var lastMsg: String = ""
 
   def receive = {
 
-    case msg: String => {
+    case msg: String =>
       // Storing the message in the internal state variable
       lastMsg = msg
       sender ! "I received " + msg
-    }
     case _ => println("sorry, what?")
 
     }

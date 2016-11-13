@@ -29,7 +29,7 @@ class _08_ArrayTest extends FunSpec with Matchers {
 
       withTypeAndSize should be (expectedArray)
 
-      for (i <- 0 to (withTypeAndSize.size -1)){
+      for (i <- withTypeAndSize.indices){
         withTypeAndSize(i) should be (expectedArray(i))
       }
     }

@@ -2,20 +2,22 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Ignore, Matchers}
 
+import scala.language.postfixOps
+
 class _A_Comparison_Iterative_Recursive_With_QuickSort extends FunSpec with Matchers {
 
   describe("A imperative QuickSort algorithm") {
     def quicksortImperative(xs: Array[Int]) {
 
       def swap(i: Int, j: Int) {
-        val t = xs(i);
-        xs(i) = xs(j);
+        val t = xs(i)
+        xs(i) = xs(j)
         xs(j) = t
       }
 
       def sort(l: Int, r: Int) {
         val pivot = xs((l + r) / 2) //choose as pivot a value in the middle
-        var i = l;
+        var i = l
         var j = r //start at both ends
         while (i <= j) {
           //j may never overtake i walking to the left
@@ -55,7 +57,7 @@ class _A_Comparison_Iterative_Recursive_With_QuickSort extends FunSpec with Matc
         xs //Bei einem einzelnen Element wird das Element zurückgegeben
       } else {
         val pivot = xs(xs.length / 2) //Wahl eines mittigen Pivot-Elements aus der Liste
-        println(s"pivot: ${pivot} (${xs.mkString})")
+        println(s"pivot: $pivot (${xs.mkString})")
 
         val arrGT = quicksortFunctional(xs filter (pivot >)) //Wiederholung für alle Werte, die größer sind
         println(s"arrGT: ${arrGT.mkString}")

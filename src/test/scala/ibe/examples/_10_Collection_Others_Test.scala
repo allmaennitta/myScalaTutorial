@@ -5,24 +5,25 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.collection.immutable.Queue
 import scala.collection.mutable
 
+//noinspection FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar
 class _10_Collection_Others_Test extends FunSpec with Matchers {
 
   describe("A set") {
     it("has each element only once") {
       Set(1, 3, 3, 3, 7) should be(Set(1, 3, 7))
-      Set(1, 3, 3, 3, 7) should not be (Array(1, 3, 7))
+      Set(1, 3, 3, 3, 7) should not be Array(1, 3, 7)
     }
     it("can be concatenated with others") {
       val _123 = Set(1, 2, 3)
       val _345 = Set(3, 4, 5)
       _123 ++ _345 should be(Set(1, 2, 3, 4, 5))
-      (_123.toList ++ _345).toList should be(List(1, 2, 3, 3, 4, 5))
+      (_123.toList ++ _345) should be(List(1, 2, 3, 3, 4, 5))
       _123.toList ::: _345.toList should be(List(1, 2, 3, 3, 4, 5))
     }
 
     it("'union' and 'intersection' can be shortened by symbols here") {
-      Set(1, 3).union(Set(2, 3)) should be((Set(1, 3, 2, 3)))
-      Set(1, 3).|(Set(2, 3)) should be((Set(1, 3, 2, 3)))
+      Set(1, 3).union(Set(2, 3)) should be (Set(1, 3, 2, 3))
+      Set(1, 3).|(Set(2, 3)) should be (Set(1, 3, 2, 3))
 
       Set(1, 2, 3).intersect(Set(2, 2)) should be(Set(2, 2))
       Set(1, 2, 3).&(Set(2, 2)) should be(Set(2, 2))
@@ -45,13 +46,13 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
       newMap += ('E' -> 'e')
       newMap += ('F' -> 'f')
 
-      newMap -= ('A')
-      newMap -= ('B')
-      newMap -= ('C')
+      newMap -= 'A'
+      newMap -= 'B'
+      newMap -= 'C'
 
 
       Map('d' -> 'e') ++ Map('e' -> 'd') should be(Map('d' -> 'e', 'e' -> 'd'))
-      Map('d' -> 'e', 'e' -> 'd') - ('e') should be(Map('d' -> 'e')) // Map without 'e'-keyed tuple
+      Map('d' -> 'e', 'e' -> 'd') - 'e' should be(Map('d' -> 'e')) // Map without 'e'-keyed tuple
       Map('d' -> 'e', 'e' -> 'd') - ('d', 'e') should be(Map.empty) // Map without second tuple
     }
 
@@ -76,7 +77,7 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
 
       nameAndAge.filterKeys((name: String) => name.length < 4) should be(Map("ute" -> 50))
 
-      nameAndAge.count({ case (n, a) => a < 30 }) should be(1)
+      nameAndAge.count({ case (myName, myAge) => myAge < 30 }) should be(1)
     }
 
     it("can be looped over") {
@@ -90,8 +91,9 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
   }
   describe("A tuple") {
     it("is an immutable set of values of different types") {
-      val ingo = (41, true, "developer", 0x1A) // a Tuple
-      var horst: Tuple4[Int, Boolean, String, Int] = (46, false, "developer", 0x1F)
+      val ingo = (41, true, "developer", 0x1A) //noinspection FunctionTupleSyntacticSugar
+      // a Tuple
+      var horst /*: Tuple4[Int, Boolean, String, Int]*/ = (46, false, "developer", 0x1F)
       horst = ingo
       horst should be(41, true, "developer", 0x1A)
       horst._2 should be(true)
@@ -106,8 +108,8 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
       capital.get("France") should be(Some("Paris")) //get returns Option type
       capital.get("Germany") should be(None) //get returns Option type
 
-      capital.get("France").getOrElse("???") should be("Paris")
-      capital.get("Germany").getOrElse("???") should be("???")
+      capital.getOrElse("France", "???") should be("Paris")
+      capital.getOrElse("Germany", "???") should be("???")
 
       capital.get("Germany").isEmpty should be(true)
     }

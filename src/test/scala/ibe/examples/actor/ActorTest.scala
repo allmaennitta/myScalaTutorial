@@ -1,6 +1,6 @@
 package ibe.examples.actor
 
-import akka.actor.{ActorSystem}
+import akka.actor.ActorSystem
 import akka.testkit.{TestActorRef, TestKit}
 import org.scalatest.{FunSpecLike, Matchers}
 

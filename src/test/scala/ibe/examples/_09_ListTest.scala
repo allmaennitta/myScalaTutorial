@@ -4,6 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable.ArrayBuffer
 
+//noinspection SimplifiableFoldOrReduce,SimplifiableFoldOrReduce
 class _09_ListTest extends FunSpec with Matchers {
 
   describe("A list") {
@@ -41,7 +42,7 @@ class _09_ListTest extends FunSpec with Matchers {
 
     it("can be constructed and noted in various ways"){
       Nil should be(List())
-      val listNum = (1 :: (2 :: (3 :: Nil)))
+      val listNum = 1 :: (2 :: (3 :: Nil))
       listNum should be(List(1, 2, 3))
 
       val listFruit = List("apple", "cherry", "pear")
@@ -86,7 +87,7 @@ class _09_ListTest extends FunSpec with Matchers {
       "hello world".count(_ == 'o') should be (2)
 
       def sumWithReduce(ints: List[Int]) = {
-        ints.reduceLeft(_ + _)
+        ints.reduceLeft(_ + _) //could of course be replaced by sum function
       }
 
       sumWithReduce(List(1,3,9)) should be (13)
@@ -127,11 +128,11 @@ class _09_ListTest extends FunSpec with Matchers {
       printf("Original balloons:%n%s%n", balloons)
 
       balloons.exists(
-        (b: Balloon) => b.color == "y" && b.filled == true
+        (b: Balloon) => b.color == "y" && b.filled
       ) should be(true)
 
       balloons.exists(
-        (b: Balloon) => b.color == "y" && b.filled == false
+        (b: Balloon) => b.color == "y" && !b.filled
       ) should be(false)
 
       balloons.contains(new Balloon("y", true)) should be(true)
@@ -150,7 +151,7 @@ class _09_ListTest extends FunSpec with Matchers {
       ) should be (true)
 
 
-      def isRed(b: Balloon) : Boolean = (b.color=="r")
+      def isRed(b: Balloon) : Boolean = b.color=="r"
       val justRed = balloons.filter(isRed)
       printf("Red balloons:%n%s%n", justRed)
 
@@ -160,7 +161,7 @@ class _09_ListTest extends FunSpec with Matchers {
       for (l <- justRed.permutations){
         for (balloon <- l) {
           println(balloon)
-          if (balloon.filled == true) countFilled +=1
+          if (balloon.filled) countFilled +=1
         }
         println("------")
       }
@@ -173,12 +174,12 @@ class _09_ListTest extends FunSpec with Matchers {
         :+ new Balloon("r", false)
         :+ new Balloon("r", true)).toList
 
-      justRed.dropWhile((b: Balloon) => b.filled == true) should be (List(
+      justRed.dropWhile((b: Balloon) => b.filled) should be (List(
         new Balloon("r", false),
         new Balloon("r", true)
       ))
 
-      justRed.takeWhile((b: Balloon) => b.filled == true) should be (List(
+      justRed.takeWhile((b: Balloon) => b.filled) should be (List(
         new Balloon("r", true)
       ))
     }
@@ -212,7 +213,7 @@ class _09_ListTest extends FunSpec with Matchers {
       ) should be (10)
     }
     it("'union', 'intersection' and 'difference' help to do it the 'Venn' way"){
-      List(1,3).union(List(2,3)) should be ((List(1,3,2,3)))
+      List(1,3).union(List(2,3)) should be (List(1,3,2,3))
       List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
       List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
     }

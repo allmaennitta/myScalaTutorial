@@ -15,7 +15,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       class Thingy(myval: Int = 0) {
         def getValue = myval
 
-        override def toString(): String = {
+        override def toString: String = {
           "Thingy: " + myval
         }
       }
@@ -23,7 +23,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       val indexes = List(1, 2, 3, 4, 5)
       var result = mutable.ListBuffer[Thingy]()
 
-      val loop = new Breaks;
+      val loop = new Breaks
       loop.breakable {
         for (a <- indexes) {
           println("Value of a: " + a)
@@ -71,7 +71,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       val results = mutable.Stack(6, 12)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       for (a <- myList
-           if a % 2 == 0;
+           if a % 2 == 0
            if a % 3 == 0) {
         println(a)
         a should be(results.pop())
@@ -84,7 +84,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       val results =
         for (a <- myList
-             if a % 2 == 0;
+             if a % 2 == 0
              if a % 3 == 0) yield a * 2
       results should be(expected)
     }
