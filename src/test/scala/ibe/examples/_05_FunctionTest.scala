@@ -121,7 +121,7 @@ class _05_FunctionTest extends FunSpec with Matchers {
 
       println(System.getProperty("user.home"))
       var userDir = () => {System.getProperty("user.home")}
-      userDir() should be ("/Users/ibeyerlein")
+      userDir() should (fullyMatch regex ("""(/Users/ibeyerlein|C:\\Users\\ingo)""".r))
     }
 
     it("can be applied partially"){

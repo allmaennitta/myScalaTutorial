@@ -1,6 +1,8 @@
 package ibe.examples
 
-import java.io.{File, FileNotFoundException, PrintWriter}
+
+import java.io._
+import java.nio.file.{FileSystems, Files, Path}
 
 import org.scalatest.{FunSpec, Matchers}
 
@@ -12,22 +14,27 @@ class _16_IO extends FunSpec with Matchers {
   describe("A file") {
 
     it("can be written, read and deleted") {
-      val writer = new PrintWriter(new File("java.txt"))
+      val file = new File("test.txt")
+
+      val writer = new FileWriter(file)
       writer.write("Hello Java")
       writer.close()
 
       var result = ArrayBuffer.empty[String]
-      val lines = Source.fromFile("java.txt")("UTF-8").getLines()
+
+      val source = Source.fromFile(file)
+      val lines = source.getLines()
 
       while (lines.hasNext){
         result += lines.next()
       }
+      source.close()
       result.mkString("","\n","") should be ("Hello Java")
 
-      new File("java.txt").delete()
+      Files.delete(file.toPath)
 
-      intercept[FileNotFoundException]{
-        Source.fromFile("java.txt")("UTF-8") should be ()
+      intercept[IOException]{
+        source should be ("this test should never be evaluated")
       }
     }
   }
