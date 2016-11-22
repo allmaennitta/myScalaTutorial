@@ -217,6 +217,5 @@ class _09_ListTest extends FunSpec with Matchers {
       List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
       List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
     }
-
   }
 }

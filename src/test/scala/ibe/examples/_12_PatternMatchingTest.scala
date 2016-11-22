@@ -8,12 +8,12 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
     it("should dicriminate integers") {
       def matchTest(x:Int):String = x match {
         case 1 => "one"
-        case 2 => "two"
+        case 2 | 3 | 4 => "some"
         case _ => "many"
       }
       matchTest(1) should be ("one")
-      matchTest(2) should be ("two")
-      matchTest(3) should be ("many")
+      matchTest(2) should be ("some")
+      matchTest(3) should be ("some")
       matchTest(55) should be ("many")
       matchTest(-1) should be ("many")
     }
