@@ -2,11 +2,13 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
+import scala.collection.mutable.ArrayBuffer
+
 class _11_ClassesTest extends FunSpec with Matchers {
 
-  describe("A class has constructor args and ") {
-    trait SomethingToSay {
-      def getTxt : String
+  describe("A class has constructor args") {
+    trait SomethingToSay { //that's a scala-"interface"
+      def getTxt: String
     }
 
     abstract class ClassWithConstructor() extends SomethingToSay {
@@ -15,9 +17,9 @@ class _11_ClassesTest extends FunSpec with Matchers {
       }
     }
 
-    it("has a mutable and outside visible field") {
+    it("has a mutable and thus public field with a default value for the constructor param") {
       class MyClass(var bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt : String = this.bar
+        override def getTxt: String = this.bar
       }
 
       val myClass = new MyClass
@@ -30,14 +32,14 @@ class _11_ClassesTest extends FunSpec with Matchers {
       myBar.toString() should be("I say uiuiui")
     }
 
-    it("has a final field") {
+    it("has a just readable (aka final) field") {
       class MyClass(val bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt : String = this.bar
-
-        // def setBar(txt : String){this.bar = txt} // reassignment to val
+        override def getTxt: String = bar
+        // def setBar(txt : String){bar = txt} // reassignment to val
       }
+
       class MyShorterClass(bar: String = "meeeh") extends ClassWithConstructor {
-        override def getTxt : String = this.bar
+        override def getTxt: String = bar
 
         // def setBar(txt : String){this.bar = txt} // reassignment to val
       }
@@ -52,159 +54,176 @@ class _11_ClassesTest extends FunSpec with Matchers {
       myClass.bar(1) should be('e') //doesn't change the string, but treats string as array and returns char at pos 1
     }
 
-    it("has a just readable field") {
-      class MyClass(var initial_bar: String = "meeeh") extends ClassWithConstructor {
-        private val bar = initial_bar
-
-        override def getTxt : String = this.bar
-
-        def getBar = bar
+    it("has overwritable getters and setters, aka accesors and mutators") {
+      class MyClass(private var _name: String = "Karl-Heinz"){
+        def name = _name                             // accessor
+        def name_=(aName: String) { _name = aName }  // mutator
       }
 
-      new MyClass().toString() should be("I say meeeh")
-      new MyClass().getBar should be("meeeh")
-      val myBar = new MyClass()
-      myBar.getBar should be("meeeh")
-      //myBar.bar should be("meeeh") => inaccessible
-      myBar.getBar(1) should be('e') //doesn't change the string, but treats string as array and returns char at pos 1
+      val clz = new MyClass("Horst")
+      clz.name should be ("Horst") //as accessor
+      clz.name = "Johnny"           //as mutator
+      clz.name should be ("Johnny")
     }
-  }
 
-  describe("A Point-class") {
-    /** *
-      * A simple point class
-      *
-      * @param init_x
-      * @param init_y
-      */
-    //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
-    class Point(val init_x: Int, val init_y: Int) extends Equal {
-      protected var x = init_x
-      protected var y = init_y
-
-      def getX = x
-
-      def getY = y
-
-      def move(dx: Int, dy: Int) {
-        x = x + dx
-        y = y + dy
+    it("has visible fields which are not part of the constructor"){
+      class Dummy{
+        var accessible : String = "valar"
+        val readable : String = "morghulis"
       }
 
-      override def toString : String = {
-        //<= please pay attention to "override"-keyword
-        s"Point is at x: $x and y: $y."
+      val dummy = new Dummy()
+      dummy.accessible should be ("valar")
+      dummy.accessible = "dracaris"
+      dummy.accessible should be ("dracaris")
+      dummy.readable should be ("morghulis")
+      //dummy.readable = "error" //=> not allowed
+    }
+
+    it("has invisible class-private-fields"){
+      class Dummy (secret : String) {
+        private var topsecret : String = secret
+
+        //even if not readable from outside one instance can see an other instances private fields
+        //order is modelled through integer values, 0 means equal
+        def readOtherObjectsProperty(that: Dummy): String = that.topsecret
       }
 
-      override def isEqualInAStrangeWay(obj: Any): Boolean =
-        obj.isInstanceOf[Point] &&
-          obj.asInstanceOf[Point].x == x
+      val dummy = new Dummy("I know nothing!")
+      //dummy.topsecret //=> nor readable nor writable
+
+      val anotherDummy = new Dummy("You know too much!")
+      dummy.readOtherObjectsProperty(anotherDummy) should be ("You know too much!")
     }
-    /** *
-      * A subclass of point, amplified by a third dimension
-      *
-      * @param init_x
-      * @param init_y
-      * @param init_z
-      */
-    //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
-    class Location(override val init_x: Int,
-                   override val init_y: Int,
-                   val init_z: Int) extends Point(init_x, init_y) {
-      protected var z: Int = init_z
 
-      def move(dx: Int, dy: Int, dz: Int) {
-        x = x + dx
-        y = y + dy
-        z = z + dz
-      }
-
-      override def toString : String = {
-        //<= please pay attention to "override"-keyword
-        s"Location is at x: $x, y: $y, z: $z."
+    it("has invisible object-private-fields"){
+      class VeryTopSecret{
+        private[this] var topsecret : String = "readableJustByInstance"
+        //def readOtherObjectsProperty(that: VeryTopSecret): String = that.topsecret //=> that.topsecret is inaccessible
       }
     }
-    /** *
-      * A trait enabling e.g. points to be compared
-      * (which of course could also be done by implementing hash and equals
-      */
-    trait Equal {
-      def isEqualInAStrangeWay(x: Any): Boolean
 
-      def isNotEqualInAStrangeWay(x: Any): Boolean = !isEqualInAStrangeWay(x)
-    }
-
-    it("works as it should") {
-      val pt = new Point(0, 0)
-      pt.toString() should be("Point is at x: 0 and y: 0.")
-      pt.move(2, 2)
-      pt.toString() should be("Point is at x: 2 and y: 2.")
-    }
-
-    it("can be extended to a 3dimensional Location by sub-classing") {
-      val loc = new Location(0, 0, 0)
-      loc.toString() should be("Location is at x: 0, y: 0, z: 0.")
-      loc.move(2, 2, 2)
-      loc.toString() should be("Location is at x: 2, y: 2, z: 2.")
-      loc.move(1, 2)
-      loc.toString() should be("Location is at x: 3, y: 4, z: 2.")
-    }
-
-    it("can be extended by a trait") {
-      val p1 = new Point(2, 3)
-      val p2 = new Point(2, 4)
-      p1.isEqualInAStrangeWay(p2) should be(true)
-
-      val p3 = new Point(3, 3)
-      p1.isNotEqualInAStrangeWay(p3) should be(true)
-      p1.isNotEqualInAStrangeWay(2) should be(true)
-    }
-  }
-
-  describe("A class") {
-    class MyString(val jString: String) {
-      private var extraData = ""
-
-      override def toString = jString + extraData
-    }
-
-    object MyString {
-      def apply (base: String, extras: String) = {
-        val s = new MyString (base)
-        s.extraData = extras
-        s
+    it("has block fields or / and lazy fields") {
+      class LazyLooner{
+        lazy val blockfield = {
+          val buffer = new ArrayBuffer[String]()
+          for (x <- 1 to 10){buffer.append("b")}
+          buffer.mkString
+        }
       }
-      def apply(base: String) = new MyString (base)
+
+      //due to "lazy" keyword the field is only accessed as soon as it is read
+      new LazyLooner().blockfield should be ("bbbbbbbbbb")
+
+      }
     }
 
-    it("can have a companion object") {
+  describe("A class can have") {
+
+    it("a companion object") {
       //which is a singleton and can have the kind of fields and methods that would be static in Java
 
-      MyString("hello", " world!").toString should be("hello world!")
-      MyString("hello").toString should be("hello")
+      class MyString private (val jString: String) {
+        private var extraData = ""
 
+        override def toString = jString + extraData
+      }
+
+      object MyString {
+        def apply(base: String, extras: String = "default!") = {
+          val s = new MyString(base)
+          s.extraData = extras
+          s
+        }
+      }
+      //new MyString("test").toString should be ("test") //thanks to "class MyString private" not accessible
+      MyString("hello", " world!").toString should be("hello world!")
+      MyString("hello ").toString should be("hello default!")
+    }
+
+    it("a minimal companion"){
+      class Brain private {
+        override def toString = "This is the brain."
+      }
+
+      object Brain {
+        val brain = new Brain
+        def getInstance = brain
+      }
+
+      Brain.getInstance.toString should be ("This is the brain.")
+    }
+
+    it("a primary constructor. The constructor 'is' the whole class") {
+      class Dummy(a: Int, b: Int) {
+        var x = 0
+        def foo() : String = {"bar"}
+        x += a
+        def getXEarly(): Int = {x }
+        val earlyX = x
+        def bar() : String =  {"foo"}
+        x += b
+        def getXLate(): Int = {x }
+        val lateX = x
+      }
+
+      val dummy = new Dummy(2, 3)
+      dummy.getXEarly() should be(5)
+      dummy.getXLate() should be(5)
+      dummy.earlyX should be (2)
+      dummy.lateX should be (5)
+    }
+
+    it("several auxiliary constructors which must refer to one former constructor"){
+      class AlleGutenDingeSind (val eins : Int, val zwei : Int, val drei : Int){
+        var vier : Int = _
+
+        def this(eins: Int){ this(eins, 0,0) }
+        def this(vier_init: String){
+          this(0)
+          vier = vier_init.toInt
+        }
+
+        new AlleGutenDingeSind(1,2,3).zwei should be (2)
+        new AlleGutenDingeSind(3).eins should be (3)
+        new AlleGutenDingeSind(3).drei should be (0)
+        new AlleGutenDingeSind("4").vier should be (4)
+        new AlleGutenDingeSind(3).zwei should be (0)
+
+      }
     }
   }
-  describe("A case class"){
-    case class Dog(color : String = "brown", race : String = "terrier" ){
-      def bark(): String = {s"I'm a $color $race"}
+
+  describe("A case class") {
+    case class Dog(color: String = "brown", race: String = "terrier") {
+      def bark(): String = {s"I'm a $color $race" }
     }
-    it("is a normal per default immutable class with built-in hash/equals/toString per fields"){
-      val leo = Dog() //no new necessary
+    it("is a normal per default immutable class with built-in hash/equals/toString per fields") {
+      val leo = Dog()
+      //no new necessary
       val fiffi = Dog("brown", "terrier")
-      leo.bark() should be ("I'm a brown terrier")
-      leo.toString should be ("Dog(brown,terrier)")
-      leo.color should be ("brown")
-      leo should be (fiffi) //hash and equals by fields is already built-in
+      leo.bark() should be("I'm a brown terrier")
+      leo.toString should be("Dog(brown,terrier)")
+      leo.color should be("brown")
+      leo should be(fiffi) //hash and equals by fields is already built-in
       //leo.color = "white" //=> reassignment to val
     }
 
-    it("can be modified best by simply copying"){
+    it("can be modified best by simply copying") {
       val maxi = Dog(color = "yellow", race = "boxer")
       val urs = maxi.copy(race = "pintcher")
       maxi should not be urs
-      urs.race should be ("pintcher")
+      urs.race should be("pintcher")
     }
   }
 
+  describe("An abstract class") {
+    abstract class Dog(color: String = "brown", race: String = "terrier") {
+      val age : Int
+      def bark(): String
+    }
+    it("can have unimplemented methods or fields") {
+
+    }
+  }
 }
