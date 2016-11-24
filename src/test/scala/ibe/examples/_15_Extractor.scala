@@ -9,7 +9,7 @@ class _15_Extractor extends FunSpec with Matchers {
       /** *
         * injection method
         */
-      def apply(user: String, domain: String) = {
+      def apply(user: String, domain: String)= {
         user + "@" + domain
       }
 

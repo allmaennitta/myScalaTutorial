@@ -6,6 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class _11a_InheritanceTest extends FunSpec with Matchers {
 
+  //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
   describe("A Point-class") {
 
     /** *
@@ -26,12 +27,12 @@ class _11a_InheritanceTest extends FunSpec with Matchers {
       * @param init_y
       */
     class Point(val init_x: Int, val init_y: Int) extends StrangeEqual {
-      protected var x = init_x
-      protected var y = init_y
+      protected var x : Int = init_x
+      protected var y : Int = init_y
 
-      def getX = x
+      def getX : Int = x
 
-      def getY = y
+      def getY  : Int = y
 
       def move(dx: Int, dy: Int) {
         x = x + dx
@@ -102,7 +103,7 @@ class _11a_InheritanceTest extends FunSpec with Matchers {
     case class Address(city : String)
 
     class Person (var name: String, var address: Address) {
-      override def toString = if (address == null) name else s"$name @ $address"
+      override def toString : String = if (address == null) name else s"$name @ $address"
     }
     class Employee (name: String, address: Address, var age: Int)
       extends Person (name, address) {

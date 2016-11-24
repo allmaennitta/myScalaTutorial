@@ -24,7 +24,7 @@ class _09a_StreamTest extends FunSpec with Matchers {
 
       intercept[StackOverflowError] {
         //here the infinite list hits the limits
-        fibFromEndless(1, 1).take(10).toList should be(List(1, 1, 2, 3, 5, 8, 13, 21, 34, 55))
+        fibFromEndless(1, 1).take(10) should be(List(1, 1, 2, 3, 5, 8, 13, 21, 34, 55))
       }
     }
 

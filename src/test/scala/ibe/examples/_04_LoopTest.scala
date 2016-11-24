@@ -18,7 +18,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       }
 
       class Thingy(myval: Int = 0) {
-        def getValue = myval
+        def getValue :Int = myval
 
         override def toString: String = {
           "Thingy: " + myval
@@ -72,7 +72,6 @@ class _04_LoopTest extends FunSpec with Matchers {
     }
 
     it("can be limited by filters") {
-      val a: Int = 0
       val results = mutable.Stack(6, 12)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       for (a <- myList
@@ -84,7 +83,6 @@ class _04_LoopTest extends FunSpec with Matchers {
     }
 
     it("can be used like filter- and map statements") {
-      val a: Int = 0
       val expected = mutable.Stack(12, 24)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       val results =
@@ -109,7 +107,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       iter.hasNext should be(true)
 
       while (iter.hasNext) {
-        println(iter.next());
+        println(iter.next())
       }
 
       iter.hasNext should be(false)

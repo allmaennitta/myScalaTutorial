@@ -14,7 +14,9 @@ import scala.collection.mutable
   */
 @RestController
 class HotelController {
+  //noinspection VarCouldBeVal
   @Autowired var hotelRepository: HotelRepository = _
+  //noinspection VarCouldBeVal
   @Autowired var helloWorld: HelloWorld = _
 
   @RequestMapping(Array("/"))

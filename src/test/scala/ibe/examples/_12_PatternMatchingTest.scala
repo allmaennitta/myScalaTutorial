@@ -23,7 +23,7 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
       def matchTest(x: Any): Any = x match {
         case 1 => "one"
         case "two" => 2
-        case y: Int => "scala.Int"
+        case _: Int => "scala.Int"
         case _ => "many"
       }
 
@@ -37,10 +37,11 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
 
       intercept[IllegalArgumentException] {
 
-        var currentEnv = "halligalli"
         //for the setting to make sense this could be a system property
-        val isProductionEnv = currentEnv match {
-          //is computed exactly once at initialisation
+        val currentEnv = "halligalli"
+
+        //noinspection ScalaUnusedSymbol
+        val isProductionEnv = currentEnv match { //is computed exactly once at initialisation
           case "prod" | "production" | "Prod" | "Production" => true
           case "test" | "develop" | "development" => false
           //for the default case instead of using _ you can set a variable which can be evaluated
@@ -66,7 +67,7 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
       }) should be(true)
 
       (List(1, 3) match {
-        case l: List[Int] => true
+        case _: List[Int] => true
       }) should be(true)
 
       def multiply(list: List[Int]) : Int = list match {
@@ -78,17 +79,17 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
     }
 
     it("can match type patterns") {
-      ((23F) match {
-        case f: Float => true
+      (23F match {
+        case _: Float => true
       }) should be(true)
     }
 
     it("can include additional ifs") {
-      ((24F) match {
+      (24F match {
         case f: Float if f%2 == 0 => true
       }) should be(true)
 
-      ((23F) match {
+      (23F match {
         case f: Float if f%2 != 0 => true
       }) should be(true)
     }
@@ -96,9 +97,9 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
 
     it("can not prevent type erasure") {
       (List(1, 3) match {
-        case l: List[String] => true
+        case _: List[String] => true
         case _ => false
-      }) should be (true) //be(false) => CAUTION, TYPE ERASURE!
+      }) should be (true) //be(false) => CAUTION, due to TYPE ERASURE the type doesn't matter!
     }
 
   }
@@ -119,7 +120,7 @@ class _12_PatternMatchingTest extends FunSpec with Matchers {
         case Person("Hans", 22) => person.name
         case Person("Ndugu", 22) => person.name
         case Person("Takeshi", 27) => person.name
-        case Person(age, 31) => person.name //Also this is possible
+        case Person(_, 31) => person.name //Also this is possible
       }
       name(hans) should be("Hans")
       name(takeshi) should be("Takeshi")

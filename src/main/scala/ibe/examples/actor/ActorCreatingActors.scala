@@ -8,7 +8,7 @@ object ActorCreatingActors{
 
 class ActorCreatingActors extends Actor{
   def receive: Receive = {
-    case message =>
+    case _ =>
       val sender2 = context.actorOf(ColoredActor.props("red"), "sender2")
       sender2 ! "Hello, world!"
   }

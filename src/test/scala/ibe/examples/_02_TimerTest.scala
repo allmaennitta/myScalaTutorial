@@ -12,7 +12,7 @@ class _02_TimerTest extends FunSpec with Matchers {
 
     object Timer {
       def oncePerInterval(repetions: Int, pauseInterval: Int, callback: () => Unit) {
-        for( i <- 1 to repetions){
+        for( _ <- 1 to repetions){
           callback()
           Thread sleep pauseInterval
         }

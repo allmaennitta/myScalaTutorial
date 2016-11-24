@@ -47,6 +47,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
       new MyClass().toString() should be("I say meeeh")
       new MyClass().bar should be("meeeh")
       val myClass = new MyClass()
+      //noinspection ScalaUnusedSymbol
       val myShorterClass = new MyShorterClass()
       //myClass.bar("uiuiui") //=> just Int-function offered to get position of char-array
       //myShorterClass.bar("uiuiui") //=> bar is not even visible from outside
@@ -56,7 +57,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
     it("has overwritable getters and setters, aka accesors and mutators") {
       class MyClass(private var _name: String = "Karl-Heinz"){
-        def name = _name                             // accessor
+        def name : String = _name                             // accessor
         def name_=(aName: String) { _name = aName }  // mutator
       }
 
@@ -82,7 +83,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
     it("has invisible class-private-fields"){
       class Dummy (secret : String) {
-        private var topsecret : String = secret
+        private val topsecret: String = secret
 
         //even if not readable from outside one instance can see an other instances private fields
         //order is modelled through integer values, 0 means equal
@@ -98,6 +99,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
     it("has invisible object-private-fields"){
       class VeryTopSecret{
+        //noinspection ScalaUnusedSymbol
         private[this] var topsecret : String = "readableJustByInstance"
         //def readOtherObjectsProperty(that: VeryTopSecret): String = that.topsecret //=> that.topsecret is inaccessible
       }
@@ -105,9 +107,9 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
     it("has block fields or / and lazy fields") {
       class LazyLooner{
-        lazy val blockfield = {
+        lazy val blockfield : String = {
           val buffer = new ArrayBuffer[String]()
-          for (x <- 1 to 10){buffer.append("b")}
+          for (_ <- 1 to 10){buffer.append("b")}
           buffer.mkString
         }
       }
@@ -118,22 +120,21 @@ class _11_ClassesTest extends FunSpec with Matchers {
       }
     }
 
-  describe("A class can have") {
+  describe("A class") {
 
-    it("a companion object") {
+    it("can have a companion object") {
       //which is a singleton and can have the kind of fields and methods that would be static in Java
 
       class MyString private (val jString: String) {
         private var extraData = ""
 
-        override def toString = jString + extraData
+        override def toString : String = jString + extraData
       }
 
       object MyString {
-        def apply(base: String, extras: String = "default!") = {
+        def apply(base: String, extras: String = "default!") : Unit = {
           val s = new MyString(base)
           s.extraData = extras
-          s
         }
       }
       //new MyString("test").toString should be ("test") //thanks to "class MyString private" not accessible
@@ -141,40 +142,40 @@ class _11_ClassesTest extends FunSpec with Matchers {
       MyString("hello ").toString should be("hello default!")
     }
 
-    it("a minimal companion"){
+    it("can have a minimal companion"){
       class Brain private {
         override def toString = "This is the brain."
       }
 
       object Brain {
         val brain = new Brain
-        def getInstance = brain
+        def getInstance : Brain = brain
       }
 
       Brain.getInstance.toString should be ("This is the brain.")
     }
 
-    it("a primary constructor. The constructor 'is' the whole class") {
+    it("can have a primary constructor. The constructor 'is' the whole class") {
       class Dummy(a: Int, b: Int) {
         var x = 0
         def foo() : String = {"bar"}
         x += a
-        def getXEarly(): Int = {x }
-        val earlyX = x
+        def checkXEarly(): Int = {x }
+        val earlyX : Int= x
         def bar() : String =  {"foo"}
         x += b
-        def getXLate(): Int = {x }
-        val lateX = x
+        def checkXLate(): Int = {x }
+        val lateX : Int= x
       }
 
       val dummy = new Dummy(2, 3)
-      dummy.getXEarly() should be(5)
-      dummy.getXLate() should be(5)
+      dummy.checkXEarly() should be(5)
+      dummy.checkXLate() should be(5)
       dummy.earlyX should be (2)
       dummy.lateX should be (5)
     }
 
-    it("several auxiliary constructors which must refer to one former constructor"){
+    it("can have several auxiliary constructors which must refer to one former constructor"){
       class AlleGutenDingeSind (val eins : Int, val zwei : Int, val drei : Int){
         var vier : Int = _
 
@@ -192,6 +193,45 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
       }
     }
+    it("can have an idividual equals / hashCode implementation"){
+      class Example (val x : Int, y : String){
+        var z = 0
+        //noinspection ScalaUnusedSymbol
+        private var zz = 0
+        //noinspection ScalaUnusedSymbol
+        private[this] var zzz = 0
+
+      // completed by Intellij Generator
+      // x (preselected) and z, zz, zzz are offered for equal-selection
+      // x is offered for hashCode-selection
+
+        def canEqual(other: Any): Boolean = other.isInstanceOf[Example]
+        override def equals(other: Any): Boolean = other match {
+          case that: Example =>
+            (that canEqual this) &&
+              x == that.x
+          case _ => false
+        }
+        override def hashCode(): Int = {
+          val state = Seq(x)
+          state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+        }
+      }
+      //Equal-Check is done by using '=='!
+      (new Example(3,"foo") == new Example(3,"bar")) should be (true)
+    }
+
+    it("can have inner classes"){
+      class PandorasBox {
+        case class Thing (name: String)
+        var things = new collection.mutable.ArrayBuffer[Thing]()
+        things += Thing("Evil Thing #1")
+        things += Thing("Evil Thing #2")
+        def addThing(name: String) { things += Thing(name) }
+      }
+
+      new PandorasBox().Thing("test").name should be ("test")
+    }
   }
 
   describe("A case class") {
@@ -201,7 +241,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
     it("is a normal per default immutable class with built-in hash/equals/toString per fields") {
       val leo = Dog()
       //no new necessary
-      val fiffi = Dog("brown", "terrier")
+      val fiffi = Dog()
       leo.bark() should be("I'm a brown terrier")
       leo.toString should be("Dog(brown,terrier)")
       leo.color should be("brown")

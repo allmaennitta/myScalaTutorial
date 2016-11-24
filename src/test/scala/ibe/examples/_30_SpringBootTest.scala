@@ -22,6 +22,8 @@ import org.springframework.test.context.junit4.SpringRunner
   //@RunWith(classOf[SpringRunner])
   @SpringBootTest(classes = Array(classOf[ibe.examples.springboot.MyConfig]), webEnvironment = WebEnvironment.RANDOM_PORT)
   class _30_SpringBootTest extends FunSpec with Matchers with BeforeAndAfter  {
+
+    //noinspection VarCouldBeVal
     @Autowired var restTemplate : TestRestTemplate = _
 
     before {

@@ -24,9 +24,9 @@ class _14_Exceptions extends FunSpec with Matchers {
       } catch {
         case ex: IOException if ex.getMessage contains "iharddisk" =>
           log += "stop buying hipster stuff"
-        case ex: IOException =>
+        case _: IOException =>
           log += "some io-stuff happened"
-        case ex: Throwable => log += "an unspecified exception occured"
+        case _: Throwable => log += "an unspecified exception occured"
       } finally {
         log += ", oh myyy"
       }

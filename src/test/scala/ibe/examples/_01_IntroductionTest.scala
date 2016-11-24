@@ -34,8 +34,8 @@ class _01_IntroductionTest extends FunSpec with Matchers {
   describe("A complex number") {
     class Complex(real: Double, imaginary: Double) {
 
-      def im = imaginary //directly taken from params
-      def re = real //not sure if you really should do that. Without var statement the values are just readable anyway
+      def im : Double = imaginary //directly taken from params
+      def re : Double = real //not sure if you really should do that. Without var statement the values are just readable anyway
 
       override def toString : String = // : String could be omitted because it is deduced
       "" + re + (if (im < 0) "" else "+") + im + "i" //no return necessary, the last value is the one taken

@@ -111,14 +111,14 @@ class _05_FunctionTest extends FunSpec with Matchers {
     it("can be a anonymous function"){
       //anonymous functions in source code are called function literals
       //at runtime they are instantiated in objects called function values
-      var inc = (x:Int) => x+1
+      val inc = (x: Int) => x + 1
       inc(7)-1 should be (7)
 
-      var mul = (x:Int, y: Int) => x*y
+      val mul = (x: Int, y: Int) => x * y
       mul(3,4) should be (12)
 
       println(System.getProperty("user.home"))
-      var userDir = () => {System.getProperty("user.home")}
+      val userDir = () => {System.getProperty("user.home") }
       userDir() should fullyMatch regex """(/Users/ibeyerlein|C:\\Users\\ingo)""".r
     }
 

@@ -24,8 +24,8 @@ class _11b_Traits extends FunSpec with Matchers {
       trait Floskel {
         val preArr = Array("Naja,", "Also,", "Nü,")
         val postArr = Array(", gell?", ", ne?", ", niwaa?")
-        val numberOfPrefixes = preArr.length
-        val numberOfSuffixes = postArr.length
+        val numberOfPrefixes : Int = preArr.length
+        val numberOfSuffixes : Int = postArr.length
 
         def floskelize(phrase: String): String = {
           val pre = preArr(new Random().nextInt(numberOfPrefixes))
@@ -35,8 +35,8 @@ class _11b_Traits extends FunSpec with Matchers {
         }
       }
 
-      var pre = new Array[Int](new Floskel {}.numberOfPrefixes)
-      var post = new Array[Int](new Floskel {}.numberOfSuffixes)
+      val pre = new Array[Int](new Floskel {}.numberOfPrefixes)
+      val post = new Array[Int](new Floskel {}.numberOfSuffixes)
       val iterations = 1000
 
       for (_ <- 1 to iterations) {
@@ -65,7 +65,7 @@ class _11b_Traits extends FunSpec with Matchers {
 
     it("can have abstract fields and methods"){
       trait ATrait {
-        def speak   // no body makes the method abstract
+        def speak()   // no body makes the method abstract
       }
     }
   }
