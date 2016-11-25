@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.language.implicitConversions
 import scala.util.Random
 
-class _11b_Traits extends FunSpec with Matchers {
+class _11b_TraitsTest extends FunSpec with Matchers {
 
   /**
     * If
@@ -67,6 +67,42 @@ class _11b_Traits extends FunSpec with Matchers {
       trait ATrait {
         def speak()   // no body makes the method abstract
       }
+    }
+
+    it("can only be implemented in java by wrapping it in a class"){
+      trait ATrait {
+        def speak()   // until this point the trait could still be implemented, because there are no implemented methods
+        def speak2() = "hallo" //now there is a method with implementation which prevents direct use in java via 'implements'
+      }
+
+      abstract class ATraitWrapper extends ATrait{} //now ATraitWrapper can be extended in Java extending the ATrait
+    }
+
+    it("can be specifically called"){
+      trait A {
+        def hello = "I'm A"
+      }
+      trait B extends A {
+        override def hello = "I'm B"
+      }
+      trait C extends A {
+        override def hello = "I'm C"
+      }
+
+      class ClassForTest extends A with B with C{
+        def getAAsSuper() = super.hello
+        def getA() = super[A].hello
+        def getB() = super[B].hello
+        def getC() = super[C].hello
+      }
+
+      new ClassForTest().hello should be ("I'm C")
+      new ClassForTest().getAAsSuper() should be ("I'm C")
+      new ClassForTest().getA() should be ("I'm A")
+      new ClassForTest().getB() should be ("I'm B")
+      new ClassForTest().getC() should be ("I'm C")
+
+
     }
   }
 

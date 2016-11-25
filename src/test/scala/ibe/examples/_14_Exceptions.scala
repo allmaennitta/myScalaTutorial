@@ -34,6 +34,15 @@ class _14_Exceptions extends FunSpec with Matchers {
       log.toList should be(List("stop buying hipster stuff", ", oh myyy"))
     }
 
+    it("can be marked to be thrown") {
+      //which is nice for Scala and necessary to be importable by Java Classes
+      @throws(classOf[IOException])
+      @throws(classOf[IllegalArgumentException])
+      @throws(classOf[UnsupportedOperationException])
+      def dangerousFunction {
+        // exception throwing code here ...
+      }
+    }
   }
 }
 

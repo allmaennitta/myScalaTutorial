@@ -13,6 +13,7 @@ val vTomcat: String = "8.0.30"
 val vScalaTest: String = "3.0.0"
 val vAkka: String = "2.4.10"
 val vSpringBoot: String = "1.4.2.RELEASE"
+val vJackson: String = "2.8.5"
 
 libraryDependencies ++= Seq(
   //UNIT-TESTING
@@ -36,6 +37,11 @@ libraryDependencies ++= Seq(
   "org.hsqldb" % "hsqldb" % "2.3.1",
   "org.hibernate" % "hibernate-validator" % "5.2.2.Final",
   "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
+
+  "com.fasterxml.jackson.core" % "jackson-core" % vJackson,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % vJackson,
+  "com.fasterxml.jackson.core" % "jackson-databind" % vJackson,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % vJackson,
 
   "org.apache.tomcat.embed" % "tomcat-embed-core" % vTomcat % "container",
   "org.apache.tomcat.embed" % "tomcat-embed-el" % vTomcat % "container",

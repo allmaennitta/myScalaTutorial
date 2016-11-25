@@ -104,13 +104,19 @@ class _11a_InheritanceTest extends FunSpec with Matchers {
 
     class Person (var name: String, var address: Address) {
       override def toString : String = if (address == null) name else s"$name @ $address"
+      def say(text : String) : String = {s"Hallo. $text"}
     }
+
     class Employee (name: String, address: Address, var age: Int)
       extends Person (name, address) {
-
+      override def say(text : String) : String = {s"Huhu. $text"}
+      def parentSays(): String = { super.say("Bla!") }
+      def butISay(): String = { say("Foo!") }
     }
-    it(""){
 
+    it("is able to call parent methods and fields"){
+      new Employee("a", new Address("b"), 10).parentSays() should be ("Hallo. Bla!")
+      new Employee("a", new Address("b"), 10).butISay() should be ("Huhu. Foo!")
     }
   }
 }
