@@ -7,7 +7,7 @@ import org.scalatest.{FunSpec, Matchers}
 /**
   * Created by ingo on 26.09.2016.
   */
-class _05_FunctionTest extends FunSpec with Matchers {
+class _05_Function extends FunSpec with Matchers {
 
   describe("A function ") {
     def time() = {

@@ -5,7 +5,7 @@ import scala.math.Numeric.LongIsIntegral.abs
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _02_TimerTest extends FunSpec with Matchers {
+class _20_Multithreading extends FunSpec with Matchers {
   var dateArr = Array.empty[Long]
 
   describe("A Timer") {

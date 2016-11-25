@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.util.control.Breaks
 import scala.util.control.Breaks._
 
-class _04_LoopTest extends FunSpec with Matchers {
+class _04_Loop extends FunSpec with Matchers {
 
   describe("A for loop") {
     it("is breakable... in a slightly strange way") {

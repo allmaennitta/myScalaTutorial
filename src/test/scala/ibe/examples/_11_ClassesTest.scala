@@ -139,7 +139,6 @@ class _11_ClassesTest extends FunSpec with Matchers {
   }
 
 
-
   describe("A method in a class") {
     /**
       * Intellij-CodeCheck has a config-option that fields and methods of a specific visibility
@@ -209,43 +208,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
     }
 
 
-
     describe("A class") {
-      it("can have a companion object") {
-        //which is a singleton and can have the kind of fields and methods that would be static in Java
-
-        class MyString private(val jString: String) {
-          private var extraData = ""
-
-          override def toString: String = jString + extraData
-        }
-
-        object MyString {
-          def apply(base: String, extras: String = "default!") : MyString = {
-            val s = new MyString(base)
-            s.extraData = extras
-            s
-          }
-        }
-        //new MyString("test").toString should be ("test") //thanks to "class MyString private" not accessible
-        MyString("hello", " world!").toString should be("hello world!")
-        MyString("hello ").toString should be("hello default!")
-      }
-
-      it("can have a minimal companion") {
-
-        class Brain private {
-          override def toString = "This is the brain."
-        }
-
-        object Brain {
-          val brain = new Brain
-          def getInstance: Brain = brain
-        }
-
-        Brain.getInstance.toString should be("This is the brain.")
-      }
-
       it("can have a primary constructor. The constructor 'is' the whole class") {
 
         class Dummy(a: Int, b: Int) {
@@ -335,17 +298,17 @@ class _11_ClassesTest extends FunSpec with Matchers {
       }
     }
 
-    describe("For fluent programming a class"){
-      it("should return itself by 'this' if it can't be extended"){
-        final class Service (){
+    describe("For fluent programming a class") {
+      it("should return itself by 'this' if it can't be extended") {
+        final class Service() {
           private var name = ""
-          private var priority : Int = 0
+          private var priority: Int = 0
 
-          def setName(name : String): Service ={
+          def setName(name: String): Service = {
             this.name = name
             this
           }
-          def setPriority(priority : Int): Service ={
+          def setPriority(priority: Int): Service = {
             this.priority = priority
             this
           }
@@ -354,19 +317,19 @@ class _11_ClassesTest extends FunSpec with Matchers {
         new Service()
           .setName("main")
           .setPriority(5)
-          .toString should be ("Service: 'main' runs with priority 5")
+          .toString should be("Service: 'main' runs with priority 5")
       }
 
-      it("should return itself by 'this.type' if it can be extended"){
+      it("should return itself by 'this.type' if it can be extended") {
         class Service {
           protected var name = ""
-          protected var priority : Int = 0
+          protected var priority: Int = 0
 
-          def setName(name : String): this.type ={
+          def setName(name: String): this.type = {
             this.name = name
             this
           }
-          def setPriority(priority : Int): this.type ={
+          def setPriority(priority: Int): this.type = {
             this.priority = priority
             this
           }
@@ -376,7 +339,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
         class JavaService extends Service {
           protected var javaVersion = "8"
 
-          def setJavaVersion(javaVersion : String): this.type ={
+          def setJavaVersion(javaVersion: String): this.type = {
             this.javaVersion = javaVersion
             this
           }
@@ -385,12 +348,11 @@ class _11_ClassesTest extends FunSpec with Matchers {
 
         new JavaService()
           .setName("main")
-              .setJavaVersion("7")
+          .setJavaVersion("7")
           .setPriority(5)
-          .toString should be ("Service: 'main' runs with priority 5 and has javaVersion: 7")
+          .toString should be("Service: 'main' runs with priority 5 and has javaVersion: 7")
       }
     }
-
 
 
     describe("A case class") {
@@ -417,7 +379,6 @@ class _11_ClassesTest extends FunSpec with Matchers {
         urs.race should be("pintcher")
       }
     }
-
 
 
     describe("An abstract class") {
