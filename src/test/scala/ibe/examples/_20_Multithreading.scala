@@ -5,14 +5,14 @@ import scala.math.Numeric.LongIsIntegral.abs
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _02_TimerTest extends FunSpec with Matchers {
+class _20_Multithreading extends FunSpec with Matchers {
   var dateArr = Array.empty[Long]
 
   describe("A Timer") {
 
     object Timer {
       def oncePerInterval(repetions: Int, pauseInterval: Int, callback: () => Unit) {
-        for( i <- 1 to repetions){
+        for( _ <- 1 to repetions){
           callback()
           Thread sleep pauseInterval
         }

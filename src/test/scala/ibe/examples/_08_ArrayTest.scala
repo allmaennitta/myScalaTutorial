@@ -34,7 +34,7 @@ class _08_ArrayTest extends FunSpec with Matchers {
       }
     }
     it("can be multidimensional") {
-      var myMatrix = ofDim[Int](3, 3)
+      val myMatrix = ofDim[Int](3, 3)
 
       for (i <- 0 to 2) {
         for (j <- 0 to 2) {
@@ -64,8 +64,7 @@ class _08_ArrayTest extends FunSpec with Matchers {
     }
 
     it("can be created using ranges"){
-      var myStep3Arr = range(0,30,3)
-      var myStep1Arr = range(15,20)
+      val myStep3Arr = range(0, 30, 3)
 
       for (i <- myStep3Arr) {
         i % 3 should be (0)

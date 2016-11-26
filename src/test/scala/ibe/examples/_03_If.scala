@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, FunSuite, Matchers}
 /**
   * Created by ingo on 26.09.2016.
   */
-class _03_IfTest extends FunSpec with Matchers  {
+class _03_If extends FunSpec with Matchers  {
 
   describe("An If statement"){
     it("is nothing at all exceptional"){

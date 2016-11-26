@@ -4,16 +4,21 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable
 import scala.util.control.Breaks
+import scala.util.control.Breaks._
 
-/**
-  * Created by ingo on 26.09.2016.
-  */
-class _04_LoopTest extends FunSpec with Matchers {
+class _04_Loop extends FunSpec with Matchers {
 
-  describe("In Scala a loop") {
+  describe("A for loop") {
     it("is breakable... in a slightly strange way") {
+      breakable {
+        for (i <- 1 to 10) {
+          println(i)
+          if (i > 4) break  // break out of the for loop
+        }
+      }
+
       class Thingy(myval: Int = 0) {
-        def getValue = myval
+        def getValue :Int = myval
 
         override def toString: String = {
           "Thingy: " + myval
@@ -38,7 +43,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       resultList.last.getValue should be(3)
     }
 
-    it("with for is fun") {
+    it("is built like that") {
       var x = 0
       for (a <- 1 to 3) {
         x += a
@@ -46,7 +51,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       x should be(6)
     }
 
-    it("with for can have more than one iteration") {
+    it("can have more than one iteration") {
       val results = mutable.Stack(2, 3, 3, 4)
       var sum = 0
       for (a <- 1 until 3; b <- 1 to 2) {
@@ -57,7 +62,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       sum should be(12)
     }
 
-    it("with for can can have a collection as source") {
+    it("can have a collection as source") {
       val myList = List("hund", "katze", "maus")
 
       for (txt <- myList) {
@@ -66,8 +71,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       }
     }
 
-    it("with for can be limited by filters") {
-      val a: Int = 0
+    it("can be limited by filters") {
       val results = mutable.Stack(6, 12)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       for (a <- myList
@@ -78,8 +82,7 @@ class _04_LoopTest extends FunSpec with Matchers {
       }
     }
 
-    it("with for can be used like filter- and map statements") {
-      val a: Int = 0
+    it("can be used like filter- and map statements") {
       val expected = mutable.Stack(12, 24)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       val results =
@@ -89,15 +92,38 @@ class _04_LoopTest extends FunSpec with Matchers {
       results should be(expected)
     }
 
-    it("with for and zipWithIndex value und index can be processed at the same time"){
+    it("can be enhanced with zipWithIndex to process value und index at the same time") {
       val a = List("a", "b", "c")
-      val result = List("0 is a", "1 is b","2 is c")
+      val result = List("0 is a", "1 is b", "2 is c")
 
       for ((e, count) <- a.zipWithIndex) {
-        s"$count is $e" should be (result(count))
+        s"$count is $e" should be(result(count))
       }
     }
 
+    it("while loops are boring") {
+      val iter = Iterator("a", "b", "c")
 
+      iter.hasNext should be(true)
+
+      while (iter.hasNext) {
+        println(iter.next())
+      }
+
+      iter.hasNext should be(false)
+    }
+
+    it("do while loops are boring") {
+      val iter = Iterator("a", "b", "c")
+
+      iter.hasNext should be(true)
+
+      var x = false
+      do {
+        x = true
+      } while (false)
+
+      x should be (true)
+    }
   }
 }

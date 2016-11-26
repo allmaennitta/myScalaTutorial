@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.collection.immutable.Queue
 import scala.collection.mutable
 
-//noinspection FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar
+//noinspection FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,ScalaUnusedSymbol
 class _10_Collection_Others_Test extends FunSpec with Matchers {
 
   describe("A set") {
@@ -77,7 +77,7 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
 
       nameAndAge.filterKeys((name: String) => name.length < 4) should be(Map("ute" -> 50))
 
-      nameAndAge.count({ case (myName, myAge) => myAge < 30 }) should be(1)
+      nameAndAge.count({ case (_, myAge) => myAge < 30 }) should be(1)
     }
 
     it("can be looped over") {
@@ -93,7 +93,7 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
     it("is an immutable set of values of different types") {
       val ingo = (41, true, "developer", 0x1A) //noinspection FunctionTupleSyntacticSugar
       // a Tuple
-      var horst /*: Tuple4[Int, Boolean, String, Int]*/ = (46, false, "developer", 0x1F)
+      var horst = (46, false, "developer", 0x1F)
       horst = ingo
       horst should be(41, true, "developer", 0x1A)
       horst._2 should be(true)
@@ -155,7 +155,7 @@ class _10_Collection_Others_Test extends FunSpec with Matchers {
   }
   describe ("A Queue"){
     it("works FIFO"){
-      var queue = mutable.Queue[Int]()
+      val queue = mutable.Queue[Int]()
       queue.enqueue(1)
       queue.enqueue(3, 5, 7)
       queue should be (Queue(1,3,5,7))

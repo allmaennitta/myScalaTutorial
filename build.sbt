@@ -12,7 +12,8 @@ lazy val root = (project in file(".")).
 val vTomcat: String = "8.0.30"
 val vScalaTest: String = "3.0.0"
 val vAkka: String = "2.4.10"
-val vSpringBoot: String = "1.3.2.RELEASE"
+val vSpringBoot: String = "1.4.2.RELEASE"
+val vJackson: String = "2.8.5"
 
 libraryDependencies ++= Seq(
   //UNIT-TESTING
@@ -26,6 +27,7 @@ libraryDependencies ++= Seq(
   //SPRING-BOOT, https://github.com/spring-projects/spring-boot/tree/master/spring-boot-starters
   "org.springframework.boot" % "spring-boot-starter-web" % vSpringBoot,
   "org.springframework.boot" % "spring-boot-starter-data-jpa" % vSpringBoot,
+  "org.springframework.boot" % "spring-boot-starter-test" % vSpringBoot % "test",
   "org.springframework.boot" % "spring-boot-starter-tomcat" % vSpringBoot % "provided",
 
   "ch.qos.logback" % "logback-classic" % "1.1.7",
@@ -35,6 +37,11 @@ libraryDependencies ++= Seq(
   "org.hsqldb" % "hsqldb" % "2.3.1",
   "org.hibernate" % "hibernate-validator" % "5.2.2.Final",
   "javax.servlet" % "javax.servlet-api" % "3.0.1" % "provided",
+
+  "com.fasterxml.jackson.core" % "jackson-core" % vJackson,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % vJackson,
+  "com.fasterxml.jackson.core" % "jackson-databind" % vJackson,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % vJackson,
 
   "org.apache.tomcat.embed" % "tomcat-embed-core" % vTomcat % "container",
   "org.apache.tomcat.embed" % "tomcat-embed-el" % vTomcat % "container",

@@ -9,6 +9,7 @@ class _09_ListTest extends FunSpec with Matchers {
 
   describe("A list") {
     it("is immutable") {
+      //noinspection ScalaUnusedSymbol
       val nums = List(1, 2, 3, 4)
       List() should be(List.empty)
       List().isEmpty should be(true)
@@ -97,33 +98,16 @@ class _09_ListTest extends FunSpec with Matchers {
 
   describe("Lists of Objects") {
 
-    class Balloon(var color: String = "blue", var filled: Boolean = false) {
-      def canEqual(other: Any): Boolean = other.isInstanceOf[Balloon]
-
-      override def equals(other: Any): Boolean = other match {
-        case that: Balloon =>
-          (that canEqual this) &&
-            color == that.color &&
-            filled == that.filled
-        case _ => false
-      }
-
-      override def hashCode(): Int = {
-        val state = Seq(color, filled)
-        state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-      }
-
-      override def toString = s"Balloon($color, $filled)"
-    }
+    case class Balloon(var color: String = "blue", var filled: Boolean = false) {}
 
     it("can be processed in a variety of ways") {
       val balloons = (new ArrayBuffer[Balloon]
-        :+ new Balloon("g", false)
-        :+ new Balloon("y", true)
-        :+ new Balloon("r", true)
-        :+ new Balloon("g", true)
-        :+ new Balloon("r", false)
-        :+ new Balloon("r", true)).toList
+        :+ Balloon("g") //Variables can be assigned by name, which makes it for Boolean more readable
+        :+ Balloon("y", filled = true)
+        :+ Balloon("r", filled = true)
+        :+ Balloon("g", filled = true)
+        :+ Balloon("r")
+        :+ Balloon("r", filled = true)).toList
 
       printf("Original balloons:%n%s%n", balloons)
 
@@ -135,8 +119,8 @@ class _09_ListTest extends FunSpec with Matchers {
         (b: Balloon) => b.color == "y" && !b.filled
       ) should be(false)
 
-      balloons.contains(new Balloon("y", true)) should be(true)
-      balloons.contains(new Balloon("y", false)) should be(false)
+      balloons.contains(Balloon("y", filled = true)) should be(true)
+      balloons.contains(Balloon("y")) should be(false)
 
       balloons.filterNot(               //red balloons are removed
         (b : Balloon) => b.color == "r"
@@ -170,17 +154,17 @@ class _09_ListTest extends FunSpec with Matchers {
 
     it("can be processed even in a way that is much more adequate for iterators"){
       val justRed = (new ArrayBuffer[Balloon]
-        :+ new Balloon("r", true)
-        :+ new Balloon("r", false)
-        :+ new Balloon("r", true)).toList
+        :+ Balloon("r", filled = true)
+        :+ Balloon("r")
+        :+ Balloon("r", filled = true)).toList
 
       justRed.dropWhile((b: Balloon) => b.filled) should be (List(
-        new Balloon("r", false),
-        new Balloon("r", true)
+        Balloon("r"),
+        Balloon("r", filled = true)
       ))
 
       justRed.takeWhile((b: Balloon) => b.filled) should be (List(
-        new Balloon("r", true)
+        Balloon("r", filled = true)
       ))
     }
   }
@@ -217,6 +201,5 @@ class _09_ListTest extends FunSpec with Matchers {
       List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
       List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
     }
-
   }
 }

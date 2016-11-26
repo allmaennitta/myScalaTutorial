@@ -1,13 +1,14 @@
 package ibe.examples
 
-import ibe.examples.springboot.SpringBoot
-import org.scalatest.{FunSpec, Matchers}
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.test.IntegrationTest
-import org.springframework.context.annotation.{ComponentScan, Configuration}
-
-class _30_SpringBootTest extends FunSpec with Matchers {
+import com.jayway.jsonpath.JsonPath
+import org.junit.runner.RunWith
+import org.scalatest.{FunSpec, Matchers, BeforeAndAfter}
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.test.context.TestContextManager
+import org.springframework.test.context.junit4.SpringRunner
 
   /**
     * Please note files
@@ -17,12 +18,30 @@ class _30_SpringBootTest extends FunSpec with Matchers {
     *   project/plugins.sbt (for building project per sbt)
     *   build.sbt
     */
- describe("SpringBoot") {
-   it("can be started and initialized") {
-      SpringBoot.main(Array())
-      SpringBoot.foo should be ("bar")
+
+  //@RunWith(classOf[SpringRunner])
+  @SpringBootTest(classes = Array(classOf[ibe.examples.springboot.MyConfig]), webEnvironment = WebEnvironment.RANDOM_PORT)
+  class _30_SpringBootTest extends FunSpec with Matchers with BeforeAndAfter  {
+
+    //noinspection VarCouldBeVal
+    @Autowired var restTemplate : TestRestTemplate = _
+
+    before {
+            val clz = this.getClass
+            val tcm = new TestContextManager(clz)
+            println(s"This: $this ; Class: $clz ; Context Manager: $tcm")
+           tcm.prepareTestInstance(this)
+    }
+
+    describe("SpringBoot") {
+      it("foo-method delivers expected bar") {
+        this.restTemplate.getForObject("/foo", classOf[String]) should be ("bar")
+      }
+      it("can read hotels from db") {
+        val jsonContext = JsonPath.parse(this.restTemplate.getForObject("/hotels", classOf[String]))
+        jsonContext.read("$.[2].name").toString should be ("Test Hotel 3")
+      }
     }
   }
-}
 
 
