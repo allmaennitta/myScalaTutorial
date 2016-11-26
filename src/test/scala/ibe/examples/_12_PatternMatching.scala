@@ -2,7 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _12_PatternMatchingTest extends FunSpec with Matchers {
+class _12_PatternMatching extends FunSpec with Matchers {
 
   describe("A match") {
     it("should dicriminate integers") {

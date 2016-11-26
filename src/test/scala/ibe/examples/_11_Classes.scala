@@ -4,7 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable.ArrayBuffer
 
-class _11_ClassesTest extends FunSpec with Matchers {
+class _11_Classes extends FunSpec with Matchers {
 
   describe("A class has constructor args") {
     trait SomethingToSay {
@@ -146,7 +146,7 @@ class _11_ClassesTest extends FunSpec with Matchers {
       *
       * More info about privacy-levels is in
       *
-      * @see  ibe.examples._11_ClassesTest
+      * @see  ibe.examples._11_Classes
       */
     it("can be public, package-specific, package-, protected, private or object-private-visible") {
 

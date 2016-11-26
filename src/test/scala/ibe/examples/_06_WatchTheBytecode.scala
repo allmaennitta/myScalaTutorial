@@ -5,16 +5,16 @@ import org.scalatest.{FunSpec, Matchers}
 /**
   * Created by ingo on 26.09.2016.
   */
-class _06_WatchTheBytecodeTest extends FunSpec with Matchers {
+class _06_WatchTheBytecode extends FunSpec with Matchers {
 /***
   * IMPORTANT:
   * Im Zweifelsfall kann man z.B. mit "javap <path to class-file> nachschauen, wie Scala eine Klasse zu Bytecode
   * compiliert, z.B.
-  * javap target/scala-2.11/test-classes/ibe/examples/_11a_InheritanceTest\$\$anonfun\$1\$Point\$1.class
+  * javap target/scala-2.11/test-classes/ibe/examples/_11a_Inheritance\$\$anonfun\$1\$Point\$1.class
   *
   * Das Ergebnis ist z.B.
   *
-  * public final ibe.examples._11a_InheritanceTest$$anonfun$1 $outer;
+  * public final ibe.examples._11a_Inheritance$$anonfun$1 $outer;
   * public boolean isNotEqualInAStrangeWay(java.lang.Object);
   * public int init_x();
   * public int init_y();
@@ -27,9 +27,9 @@ class _06_WatchTheBytecodeTest extends FunSpec with Matchers {
   * public void move(int, int);
   * public java.lang.String toString();
   * public boolean isEqualInAStrangeWay(java.lang.Object);
-  * public ibe.examples._11a_InheritanceTest$$anonfun$1 ibe$examples$_11a_InheritanceTest$$anonfun$Point$$$outer();
-  * public ibe.examples._11a_InheritanceTest$$anonfun$1 ibe$examples$_11a_InheritanceTest$$anonfun$StrangeEqual$$$outer();
-  * public ibe.examples._11a_InheritanceTest$$anonfun$1$Point$1(ibe.examples._11a_InheritanceTest$$anonfun$1, int, int);
+  * public ibe.examples._11a_Inheritance$$anonfun$1 ibe$examples$_11a_Inheritance$$anonfun$Point$$$outer();
+  * public ibe.examples._11a_Inheritance$$anonfun$1 ibe$examples$_11a_Inheritance$$anonfun$StrangeEqual$$$outer();
+  * public ibe.examples._11a_Inheritance$$anonfun$1$Point$1(ibe.examples._11a_Inheritance$$anonfun$1, int, int);
   * }
   *
   * Another option is to use

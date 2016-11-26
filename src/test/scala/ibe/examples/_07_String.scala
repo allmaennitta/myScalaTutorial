@@ -2,7 +2,7 @@ package ibe.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _07_StringTest extends FunSpec with Matchers {
+class _07_String extends FunSpec with Matchers {
 
   describe("A String"){
 

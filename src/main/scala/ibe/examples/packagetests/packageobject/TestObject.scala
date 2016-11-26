@@ -1,4 +1,5 @@
-package ibe.packageobject
+package ibe.examples.packagetests.packageobject
+
 
 object TestObject {
   def packageEcho(txt : String) = {echo(txt)}

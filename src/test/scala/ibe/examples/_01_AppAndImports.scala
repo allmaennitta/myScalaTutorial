@@ -6,7 +6,7 @@ import org.scalatest._
 import java.text.DateFormat._
 import java.util.{Date, Locale}
 
-class _01_AppAndJavaClasses extends FunSpec with Matchers {
+class _01_AppAndImports extends FunSpec with Matchers {
 
   describe("A JavaClass") {
     object SalutMonde {
@@ -53,7 +53,7 @@ class _01_AppAndJavaClasses extends FunSpec with Matchers {
     }
   }
 
-  describe("Imports"){
+  describe("An import"){
     it("can be made in a slightly enhanced and simplified way and should still be " +
       "on top and directly below package statement"){
 
@@ -62,6 +62,10 @@ class _01_AppAndJavaClasses extends FunSpec with Matchers {
 
       val frame = new JIFrame()
       frame should not be Nil
+    }
+    it("can be made in a static way"){
+      import java.lang.Math._ //import statements can be anywhere
+      PI should be (3.14 +- 0.1)
     }
   }
 

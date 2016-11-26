@@ -4,7 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable.ArrayBuffer
 
-class _11a_InheritanceTest extends FunSpec with Matchers {
+class _11a_Inheritance extends FunSpec with Matchers {
 
   //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
   describe("A Point-class") {

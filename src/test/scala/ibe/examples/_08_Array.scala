@@ -3,7 +3,7 @@ package ibe.examples
 import org.scalatest.{FunSpec, Matchers}
 import Array._
 
-class _08_ArrayTest extends FunSpec with Matchers {
+class _08_Array extends FunSpec with Matchers {
 
   describe("An Array"){
     it("can append new elements"){

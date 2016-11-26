@@ -6,7 +6,7 @@ import scala.collection.immutable.Queue
 import scala.collection.mutable
 
 //noinspection FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,ScalaUnusedSymbol
-class _10_Collection_Others_Test extends FunSpec with Matchers {
+class _10_Collection_Others extends FunSpec with Matchers {
 
   describe("A set") {
     it("has each element only once") {

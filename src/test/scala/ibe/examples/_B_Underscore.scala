@@ -4,7 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.language.higherKinds
 
 //noinspection ConvertibleToMethodValue
-class _B_UnderscoreTest extends FunSpec with Matchers {
+class _B_Underscore extends FunSpec with Matchers {
 
   describe("Underscore") {
 

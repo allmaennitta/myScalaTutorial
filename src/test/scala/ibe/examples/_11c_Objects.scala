@@ -1,7 +1,7 @@
 package ibe.examples
 
-import ibe.packageobject.Margin.Value
-import ibe.packageobject.TestObject
+import ibe.examples.packagetests.packageobject.Margin.Value
+import ibe.examples.packagetests.packageobject.TestObject
 import org.scalatest.{FunSpec, Matchers}
 
 import scala.language.implicitConversions

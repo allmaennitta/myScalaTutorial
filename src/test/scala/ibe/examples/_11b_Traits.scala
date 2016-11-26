@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.language.implicitConversions
 import scala.util.Random
 
-class _11b_TraitsTest extends FunSpec with Matchers {
+class _11b_Traits extends FunSpec with Matchers {
 
   /**
     * If
@@ -63,7 +63,7 @@ class _11b_TraitsTest extends FunSpec with Matchers {
       }
     }
 
-    it("can have abstract fields and methods"){
+    it("can have abstract fields and methods"){ //it is the Scala way of "interface"
       trait ATrait {
         def speak()   // no body makes the method abstract
       }
