@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.collection.mutable.ArrayBuffer
 
 //noinspection SimplifiableFoldOrReduce,SimplifiableFoldOrReduce
-class _09_List extends FunSpec with Matchers {
+class _08b_List extends FunSpec with Matchers {
 
   describe("A list") {
     it("is immutable") {

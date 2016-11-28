@@ -11,7 +11,7 @@ class _11c_CastingAndPackages extends FunSpec with Matchers {
 
       val obj : Any = new Person("Helga").asInstanceOf[Any]
       //obj.name => geht nicht
-      obj.getClass.toString should be ("class ibe.examples._11c_ClassMeta$$anonfun$1$$anonfun$apply$mcV$sp$1$Person$3")
+      obj.getClass.toString should be ("class ibe.examples._11c_CastingAndPackages$$anonfun$1$$anonfun$apply$mcV$sp$1$Person$3")
       obj.asInstanceOf[Person].name should be ("Helga")
     }
   }

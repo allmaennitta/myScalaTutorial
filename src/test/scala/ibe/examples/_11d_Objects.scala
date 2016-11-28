@@ -6,7 +6,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.language.implicitConversions
 
-class _11c_Objects extends FunSpec with Matchers {
+class _11d_Objects extends FunSpec with Matchers {
 
   describe("An object") {
     /**
@@ -112,8 +112,8 @@ class _11c_Objects extends FunSpec with Matchers {
     }
 
     it("can be realized by using 'apply'"){
-      Animal(Animal.DOG).getClass.toString should be ("class ibe.examples._11c_Objects$$anonfun$3$Animal$3$Dog")
-      Animal(Animal.CAT).getClass.toString should be ("class ibe.examples._11c_Objects$$anonfun$3$Animal$3$Cat")
+      Animal(Animal.DOG).getClass.toString should be ("class ibe.examples._11d_Objects$$anonfun$3$Animal$3$Dog")
+      Animal(Animal.CAT).getClass.toString should be ("class ibe.examples._11d_Objects$$anonfun$3$Animal$3$Cat")
     }
   }
 }

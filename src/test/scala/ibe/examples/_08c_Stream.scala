@@ -5,7 +5,7 @@ import java.time.{LocalDate, Month}
 import org.scalatest.{FunSpec, Matchers}
 
 //noinspection SimplifiableFoldOrReduce,SimplifiableFoldOrReduce
-class _09a_Stream extends FunSpec with Matchers {
+class _08c_Stream extends FunSpec with Matchers {
 
 
   describe("A stream") {

@@ -9,42 +9,29 @@ import org.scalatest.{FunSpec, Matchers}
   */
 class _05_Function extends FunSpec with Matchers {
 
-  describe("A function ") {
-    def time() = {
-      System.currentTimeMillis()
-    }
-
-    def delayed(t: => Long) = {
-      Thread sleep 10
-      t
-    }
-
-    it("evaluates its params immedately") {
-      val start = System.currentTimeMillis()
-      val end = time()
-      (end - start) should be < 5L
-    }
-
-    it("evaluates its params lazily 'call-by-name'") {
-      val start = System.currentTimeMillis()
-      val end = delayed(time())
-
-      (end - start) should (be >= 10L and be <= 20L)
-    }
-  }
-
-  describe("In Scala a function") {
+  describe("A function") {
     it("returns a tuple of values") {
       def returnPair() = {
         val x = 42
         val y = "The answer to all questions"
-        (x, y)
+        (x, y) //no return is needed. The last value in the function is considered the return value
       }
 
       val (myInt: Int, myString: String) = returnPair()
       myInt should not be 43
       myInt should be(42)
       myString should be("The answer to all questions")
+    }
+
+    it("can have the return type 'Unit' which is equivalent to the Java 'void'") {
+      var sideEffectVictim = 55
+      def sideEffectProvoker(): Unit = {
+        sideEffectVictim = sideEffectVictim - 44 //with regards to 'why variable access' see closure below
+      }
+
+      sideEffectVictim should be (55)
+      sideEffectProvoker()
+      sideEffectVictim should be (11)
     }
 
     it("has named params") {
@@ -87,18 +74,62 @@ class _05_Function extends FunSpec with Matchers {
       apply(layout, 10) should be("[10]")
     }
 
+    it("can return a function"){
+      def greeting(language: String) = (name: String) => {
+        val english = () => "Hello, " + name
+        val spanish = () => "Buenos dias, " + name
+        language match {
+          case "english" => println("returning 'english' function")
+            english()
+          case "spanish" => println("returning 'spanish' function")
+            spanish()
+        }
+      }
+      val sayHello = greeting("english")
+      sayHello("Alex") should be ("Hello, Alex")
+    }
+
     it("can be a anonymous function") {
       //anonymous functions in source code are called function literals
       //at runtime they are instantiated in objects called function values
       val inc = (x: Int) => x + 1
       inc(7) - 1 should be(7)
 
-      val mul = (x: Int, y: Int) => x * y
+      val mul: (Int,Int) => Int = (x: Int, y: Int) => x * y //with explicit type definition
       mul(3, 4) should be(12)
 
       println(System.getProperty("user.home"))
       val userDir = () => {System.getProperty("user.home") }
       userDir() should fullyMatch regex """(/Users/ibeyerlein|C:\\Users\\ingo)""".r
+    }
+
+    it("can be an abbreviated anonymous function"){
+      val list = List.range(1,17)
+
+      val transformed_list = list.filter( (i:Int) => i%2 == 0 )
+      val tl1 = transformed_list.filter( i => i%4 == 0 ) //type is inferred from list type
+      val tl2 = tl1.filter( _%8 == 0 ) //variable is not necessary if it is used just once
+      tl2 should be (List(8,16))
+    }
+
+    it("can be defined in various 'styles'"){
+      def modMethod1(i: Int) = i % 2 == 0
+      def modMethod2(i: Int) = { i % 2 == 0 }
+      def modMethod3(i: Int): Boolean = i % 2 == 0
+      def modMethod4(i: Int): Boolean = { i % 2 == 0 }
+    }
+
+    it("can be passed as arguments"){
+      val double = (i: Int) => { i * 2 }
+      List(1,2,3).map(double) should be (List(2,4,6))
+    }
+
+    it("can be passed as arguments if the function has the appropriate signature"){
+      val double = (i: Int) => { i * 2 }
+      def integerListModifier(list: List[Int], modFunction: Int => Int) : List[Int] = {
+        list.map(modFunction)
+      }
+      integerListModifier(List(1,2,3), double) should be (List(2,4,6))
     }
 
     it("can be applied partially") {
@@ -112,6 +143,18 @@ class _05_Function extends FunSpec with Matchers {
       partialLog("hallooo") should be("12:24:00 ----- hallooo")
       partialLog("xyz") should be("12:24:00 ----- xyz")
     }
+
+    //which should not be mixed with the fact that functions can be realized as PartialFunctions
+    it("can be PartialFunctions, in the mathematical sense, that not for all inputs there is an output"){
+      val dnd = 42
+      val divide = new PartialFunction[Int, Int] {
+        def apply(dor: Int) = dnd / dor
+        def isDefinedAt(dor: Int) = dor != 0
+      }
+      if (divide.isDefinedAt(1)) divide(1) should be (42)
+      divide.isDefinedAt(0) should be (false)
+    }
+
 
     //currying means that one param can be added at one time and another dynamcially later
     it("can be curried") {
@@ -149,14 +192,63 @@ class _05_Function extends FunSpec with Matchers {
 
     }
 
-    //a closure is a function depending on an outside value
-    it("can be a closure") {
-      val justStandingHere = "Booo!"
-      val concatString = (s: String) => s + justStandingHere
+    /**
+     * For closure example below
+     */
+    class Foo {
+      // a method that takes a function and a string, and passes the string into
+      // the function, and then executes the function
+      def exec(f:(String) => Unit, name: String) {
+        f(name)
+      }
+    }
 
-      concatString("I'm so easily startled! ") should be("I'm so easily startled! Booo!")
+    // Closure functionality means that a function refers to value in the scope the function was designed in
+    // E.g. here sayHello method references the variable hello from within the exec method of the Foo class on the
+    // first run (where hello was no longer in scope), but on the second run, it also picked up the change to the
+    // hello variable (from Hello to Hola).
+    it("can be a closure") {
+        var hello = "Hello"
+        def sayHello(name: String) { println(s"$hello, $name") }
+
+        // execute sayHello from the exec method foo
+        val foo = new Foo
+        foo.exec(sayHello, "Al")
+
+        // change the local variable 'hello', then execute sayHello from
+        // the exec method of foo, and see what happens
+        hello = "Hola"
+        foo.exec(sayHello, "Lorenzo")
     }
   }
+
+
+  describe("A function can have by-name-params, being evaluated lazily") {
+    def time() = {
+      System.currentTimeMillis()
+    }
+
+    def delayed(t: => Long) = { // t: => Long is a "by-name parameter", like "give me something that will generate a
+                                // Long value on request
+      Thread sleep 10
+      t
+    }
+
+    it("evaluates its params immedately") {
+      val start = System.currentTimeMillis()
+      val end = time()
+      (end - start) should be < 5L
+    }
+
+    it("evaluates its params lazily 'call-by-name'") {
+      val start = System.currentTimeMillis()
+      val end = delayed(time())
+
+      (end - start) should (be >= 10L and be <= 20L)
+    }
+  }
+
+
 
   describe("A recursive function") {
     //it can do anything for which an iteration could be used - and vice versa
