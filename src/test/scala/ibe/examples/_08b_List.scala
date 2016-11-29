@@ -6,8 +6,13 @@ import scala.collection.mutable.ArrayBuffer
 
 //noinspection SimplifiableFoldOrReduce,SimplifiableFoldOrReduce
 class _08b_List extends FunSpec with Matchers {
+  /**
+    * Under "List" I mention a lot of collection methods that are equally available for other types of
+    * collections.
+    */
 
-  describe("A list") {
+  describe("A list, to mention the basics,") {
+
     it("is immutable") {
       //noinspection ScalaUnusedSymbol
       val nums = List(1, 2, 3, 4)
@@ -15,12 +20,105 @@ class _08b_List extends FunSpec with Matchers {
       List().isEmpty should be(true)
     }
 
+    it("can be constructed and noted in various ways") {
+      Nil should be(List())
+      val listNum = 1 :: (2 :: (3 :: Nil))
+      listNum should be(List(1, 2, 3))
+
+      val listFruit = List("apple", "cherry", "pear")
+
+      listNum.:::(listFruit) should be(List("apple", "cherry", "pear", 1, 2, 3))  //don't know why it is
+      // "reversed" this way
+      listNum ::: listFruit should be(List(1, 2, 3, "apple", "cherry", "pear")) //which makes it pretty expressive :)
+
+      listNum :: listFruit should be(List(List(1, 2, 3), "apple", "cherry", "pear"))
+
+      3 :: 2 :: 1 :: Nil should be(List(3, 2, 1))
+
+      //List(1,2) + 3 isn't supported anymore because it takes much more time than prepending with :: and reversing
+    }
+  }
+
+  describe("A list") {
+    val listNum = List(1, 2, 3)
+    val listFruit = List("apple", "cherry", "pear")
+
     it("can append elements resulting in a new list") {
       var myList = List(1, 2, 3)
       myList = 44 +: myList :+ 55
       myList should be(List(44, 1, 2, 3, 55))
       //=> consider using ArrayBuffer for appending new elements
+    }
 
+    it("can be concatenated") {
+      List.concat(listNum, listFruit) should be(List(1, 2, 3, "apple", "cherry", "pear"))
+    }
+
+    it("can be flattened"){
+      List(List(1,2), List(3,4)).flatten should be (List(1,2,3,4))
+    }
+
+    it("can be grouped"){
+      val x = List(15, 10, 5, 8, 20, 12)
+
+      x.groupBy(_ > 10) should be (Map(false -> List(10, 5, 8), true -> List(15, 20, 12)))
+
+      x.partition(_ > 10) should be (List(15, 20, 12), List(10, 5, 8))
+
+      x.span(_ < 20) should be (List(15, 10, 5, 8), List(20, 12))
+
+      x.splitAt(2) should be (List(15, 10), List(5, 8, 20, 12))
+
+      x.sliding(size = 2).toList should be (List(List(15, 10), List(10, 5), List(5, 8), List(8, 20), List(20, 12))) //is originally returning an iterator
+      x.sliding(size = 2, step = 3).toList should be (List(List(15, 10), List(8, 20)))
+
+      val pairs = List(("soup", "cream"), ("fries", "ketchup"))
+      val (plaits, toppings) = pairs.unzip
+      plaits should be (List("soup", "fries"))
+      toppings should be (List("cream", "ketchup"))
+    }
+
+    it("can be split or reduced in various ways") {
+      listFruit.head should be("apple")
+      listFruit.tail should be(List("cherry", "pear"))
+      listFruit.init should be(List("apple", "cherry"))
+      listFruit.last should be("pear")
+
+      listNum.dropRight(1) should be(List(1, 2))
+      listNum.drop(1) should be(List(2, 3))
+    }
+
+    it("can be filled quickly") {
+      List.fill(3)("apples") should be(List("apples", "apples", "apples")) //fill list 3 times with "apples"
+    }
+
+    it("can be reversed") {
+      listFruit.reverse should be(List("pear", "cherry", "apple"))
+    }
+
+    it("can be printed as text") {
+      List(1, 2, 3, 4).mkString("[", ",", "]") should be("[1,2,3,4]")
+      listNum.addString(new StringBuilder(), "//").toString() should be("1//2//3")
+    }
+
+    it("can be checked in various ways") {
+      listNum.contains(2) should be(true)
+      listNum.contains(4) should be(false)
+    }
+
+    it("can be evaluated") {
+      List(2, 6, 3, 1, 4).max should be(6)
+      List(2, 6, 3, 1, 4).min should be(1)
+
+      "hello world".count(_ == 'o') should be(2)
+    }
+
+    it("can be summed up in initially strange ways") {
+      def sumWithReduce(ints: List[Int]) = {
+        ints.reduceLeft(_ + _) //could of course be replaced by sum function
+      }
+
+      sumWithReduce(List(1, 3, 9)) should be(13)
     }
 
     it("can be multidimensional") {
@@ -40,76 +138,24 @@ class _08b_List extends FunSpec with Matchers {
 
       matrixLists should be(matrixArrays)
     }
-
-    it("can be constructed and noted in various ways"){
-      Nil should be(List())
-      val listNum = 1 :: (2 :: (3 :: Nil))
-      listNum should be(List(1, 2, 3))
-
-      val listFruit = List("apple", "cherry", "pear")
-
-      listNum.:::(listFruit) should be(List("apple", "cherry", "pear", 1, 2, 3))  //don't know why it is
-                                                                                  // "reversed" this way
-      listNum ::: listFruit should be(List(1, 2, 3, "apple", "cherry", "pear")) //which makes it pretty expressive :)
-
-      //pay attention to
-      listNum :: listFruit should be (List(List(1,2,3),"apple", "cherry", "pear"))
-      3 :: 2 :: 1 :: Nil should be (List(3, 2, 1))
-
-      List(1,2,3,4).mkString("[",",","]") should be ("[1,2,3,4]")
-    }
-
-    it("has some interesting options to operate with.") {
-      val listNum = List(1, 2, 3)
-      val listFruit = List("apple", "cherry", "pear")
-
-      List.concat(listNum, listFruit) should be(List(1, 2, 3, "apple", "cherry", "pear"))
-
-      listFruit.head should be ("apple")
-      listFruit.tail should be (List("cherry", "pear"))
-      listFruit.init should be (List("apple", "cherry"))
-      listFruit.last should be ("pear")
-
-      List.fill(3)("apples") should be(List("apples", "apples", "apples")) //fill list 3 times with "apples"
-      listFruit.reverse should be(List("pear", "cherry", "apple"))
-
-      //List(1,2) + 3 isn't supported anymore because it takes much more time than prepending with :: and reversing
-
-      listNum.addString(new StringBuilder(), "//").toString() should be("1//2//3")
-      listNum.contains(2) should be(true)
-      listNum.contains(4) should be(false)
-
-      listNum.dropRight(1) should be(List(1, 2))
-      listNum.drop(1) should be(List(2, 3))
-
-      List(2,6,3,1,4).max should be (6)
-      List(2,6,3,1,4).min should be (1)
-
-      "hello world".count(_ == 'o') should be (2)
-
-      def sumWithReduce(ints: List[Int]) = {
-        ints.reduceLeft(_ + _) //could of course be replaced by sum function
-      }
-
-      sumWithReduce(List(1,3,9)) should be (13)
-
-    }
   }
 
-  describe("Lists of Objects") {
+
+  describe("A List of Objects") {
 
     case class Balloon(var color: String = "blue", var filled: Boolean = false) {}
 
-    it("can be processed in a variety of ways") {
-      val balloons = (new ArrayBuffer[Balloon]
-        :+ Balloon("g") //Variables can be assigned by name, which makes it for Boolean more readable
-        :+ Balloon("y", filled = true)
-        :+ Balloon("r", filled = true)
-        :+ Balloon("g", filled = true)
-        :+ Balloon("r")
-        :+ Balloon("r", filled = true)).toList
+    val balloons = (new ArrayBuffer[Balloon]
+      :+ Balloon("g") //Variables can be assigned by name, which makes it for Boolean more readable
+      :+ Balloon("y", filled = true)
+      :+ Balloon("r", filled = true)
+      :+ Balloon("g", filled = true)
+      :+ Balloon("r")
+      :+ Balloon("r", filled = true)).toList
 
-      printf("Original balloons:%n%s%n", balloons)
+    printf("Original balloons:%n%s%n", balloons)
+
+    it("can be checked for criteria") {
 
       balloons.exists(
         (b: Balloon) => b.color == "y" && b.filled
@@ -123,57 +169,57 @@ class _08b_List extends FunSpec with Matchers {
       balloons.contains(Balloon("y")) should be(false)
 
       balloons.filterNot(               //red balloons are removed
-        (b : Balloon) => b.color == "r"
+        (b: Balloon) => b.color == "r"
       ).exists(                         // and thus shouldn't exist anymore
-        (b: Balloon) => b.color =="r"
-      ) should be (false)
+        (b: Balloon) => b.color == "r"
+      ) should be(false)
 
       balloons.filterNot(               //red balloons are removed
-        (b : Balloon) => b.color == "r"
+        (b: Balloon) => b.color == "r"
       ).exists(                         // and thus yellow ones still should exist
-        (b: Balloon) => b.color =="y"
-      ) should be (true)
+        (b: Balloon) => b.color == "y"
+      ) should be(true)
 
 
-      def isRed(b: Balloon) : Boolean = b.color=="r"
+      def isRed(b: Balloon): Boolean = b.color == "r"
       val justRed = balloons.filter(isRed)
       printf("Red balloons:%n%s%n", justRed)
 
-      justRed.forall(isRed) should be (true)
+      justRed.forall(isRed) should be(true)
 
       var countFilled: Int = 0
-      for (l <- justRed.permutations){
+      for (l <- justRed.permutations) {
         for (balloon <- l) {
           println(balloon)
-          if (balloon.filled) countFilled +=1
+          if (balloon.filled) countFilled += 1
         }
         println("------")
       }
-      countFilled should be (6) //with 3 permutation groups and 2 filled per group
+      countFilled should be(6) //with 3 permutation groups and 2 filled per group
     }
 
-    it("can be processed even in a way that is much more adequate for iterators"){
+    it("can be processed even in a way that is much more adequate for iterators") {
       val justRed = (new ArrayBuffer[Balloon]
         :+ Balloon("r", filled = true)
         :+ Balloon("r")
         :+ Balloon("r", filled = true)).toList
 
-      justRed.dropWhile((b: Balloon) => b.filled) should be (List(
+      justRed.dropWhile((b: Balloon) => b.filled) should be(List(
         Balloon("r"),
         Balloon("r", filled = true)
       ))
 
-      justRed.takeWhile((b: Balloon) => b.filled) should be (List(
+      justRed.takeWhile((b: Balloon) => b.filled) should be(List(
         Balloon("r", filled = true)
       ))
     }
   }
 
-  /**
-    * Example by https://www.garysieling.com/blog/scala-collect-example
-    */
+/**
+  * Example by https://www.garysieling.com/blog/scala-collect-example
+  */
   describe("Special functions like") {
-    it("'tabulate' and 'collec' help to transform lists in an easy way"){
+    it("'tabulate' and 'collec' help to transform lists in an easy way") {
       List.tabulate(6)(n => n * n) should be(List(0, 1, 4, 9, 16, 25))
       List.tabulate(5)(_ + 2) should be(List(2, 3, 4, 5, 6))
       List.tabulate(2, 3)(_ + 3 * _) should be(List(List(0, 3, 6), List(1, 4, 7))) //first _+ seems to be only there for
@@ -189,17 +235,21 @@ class _08b_List extends FunSpec with Matchers {
       List(0, 1, "2", "3", Some(4), Some("5")).collect(convertFn) should be(List(0, 1, 2, 3, 5))
     }
 
-    it("'aggregate' can help to calculate parallely with trees"){
+    it("'aggregate' can help to calculate parallely with trees") {
       val listOfBinaries = List("001", "010", "11", "100")
       listOfBinaries.aggregate(0)( //constant to which later values are added
-        { (sum, str) => sum + Integer.parseInt(str,2) }, //turn binary into Int and add it to sum
-        { (p1, p2) => p1 + p2 } //add sums
-      ) should be (10)
+        {
+          (sum, str) => sum + Integer.parseInt(str, 2)
+        }, //turn binary into Int and add it to sum
+        {
+          (p1, p2) => p1 + p2
+        } //add sums
+      ) should be(10)
     }
-    it("'union', 'intersection' and 'difference' help to do it the 'Venn' way"){
-      List(1,3).union(List(2,3)) should be (List(1,3,2,3))
-      List(1,2,2,3).intersect(List(2,2)) should be (List(2,2))
-      List(1,2,2,3).diff(List(2,2)) should be (List(1,3))
+    it("'union', 'intersection' and 'difference' help to do it the 'Venn' way") {
+      List(1, 3).union(List(2, 3)) should be(List(1, 3, 2, 3))
+      List(1, 2, 2, 3).intersect(List(2, 2)) should be(List(2, 2))
+      List(1, 2, 2, 3).diff(List(2, 2)) should be(List(1, 3))
     }
   }
 }

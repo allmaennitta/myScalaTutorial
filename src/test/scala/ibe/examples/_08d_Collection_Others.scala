@@ -4,6 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.immutable.Queue
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 //noinspection FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,FunctionTupleSyntacticSugar,ScalaUnusedSymbol
 class _08d_Collection_Others extends FunSpec with Matchers {
@@ -22,8 +23,8 @@ class _08d_Collection_Others extends FunSpec with Matchers {
     }
 
     it("'union' and 'intersection' can be shortened by symbols here") {
-      Set(1, 3).union(Set(2, 3)) should be (Set(1, 3, 2, 3))
-      Set(1, 3).|(Set(2, 3)) should be (Set(1, 3, 2, 3))
+      Set(1, 3).union(Set(2, 3)) should be(Set(1, 3, 2, 3))
+      Set(1, 3).|(Set(2, 3)) should be(Set(1, 3, 2, 3))
 
       Set(1, 2, 3).intersect(Set(2, 2)) should be(Set(2, 2))
       Set(1, 2, 3).&(Set(2, 2)) should be(Set(2, 2))
@@ -78,20 +79,29 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       nameAndAge.filterKeys((name: String) => name.length < 4) should be(Map("ute" -> 50))
 
       nameAndAge.count({ case (_, myAge) => myAge < 30 }) should be(1)
-    }
 
-    it("can be looped over") {
-      val names = Map("a" -> 1, "b" -> 2, "c"->3)
-      val result = Iterator("a is 1", "b is 2", "c is 3")
-
-      for ((k, v) <- names) {
-        s"$k is $v" should be(result.next())
+      var buffer = new ArrayBuffer[String]()
+      nameAndAge.foreach {
+        case (name, age) => buffer.append(name(0).toString, age.toString)
       }
+      buffer.mkString should be("h30a23u50")
     }
   }
+
+  it("can be looped over") {
+    val names = Map("a" -> 1, "b" -> 2, "c" -> 3)
+    val result = Iterator("a is 1", "b is 2", "c is 3")
+
+    for ((k, v) <- names) {
+      s"$k is $v" should be(result.next())
+    }
+  }
+
+
   describe("A tuple") {
     it("is an immutable set of values of different types") {
-      val ingo = (41, true, "developer", 0x1A) //noinspection FunctionTupleSyntacticSugar
+      val ingo = (41, true, "developer", 0x1A)
+      //noinspection FunctionTupleSyntacticSugar
       // a Tuple
       var horst = (46, false, "developer", 0x1F)
       horst = ingo
@@ -102,6 +112,8 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       (1, 2).swap should be(2, 1)
     }
   }
+
+
   describe("An Option") {
     it("is an object or none") {
       val capital = Map("France" -> "Paris")
@@ -125,6 +137,7 @@ class _08d_Collection_Others extends FunSpec with Matchers {
     }
   }
 
+
   describe("An Iterator") {
     it("iterates") {
       val loriterator = Iterator("ein", "ohne", "ist", "aber")
@@ -139,7 +152,7 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       }
       citation.result() should be("ein leben ohne mops ist möglich aber sinnlos")
     }
-    it("can be combined") {
+    it("can be combined - no need to generate an extra index anymore or not to use the for-each-approach") {
       val loriterator = Iterator("ein", "ohne", "ist", "aber")
       val iteriot = Iterator("leben", "mops", "möglich", "sinnlos")
       var citation = new mutable.StringBuilder()
@@ -153,28 +166,33 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       citation.result() should be("ein leben ohne mops ist möglich aber sinnlos")
     }
   }
-  describe ("A Queue"){
-    it("works FIFO"){
+
+
+  describe("A Queue") {
+    it("works FIFO") {
       val queue = mutable.Queue[Int]()
       queue.enqueue(1)
       queue.enqueue(3, 5, 7)
-      queue should be (Queue(1,3,5,7))
-      queue.head should be (1)
-      queue.head should be (1) //head is not popped
-      queue.last should be (7)
-      queue.dequeue() should be (1)
-      queue.head should be (3)
+      queue should be(Queue(1, 3, 5, 7))
+      queue.head should be(1)
+      queue.head should be(1) //head is not popped
+      queue.last should be(7)
+      queue.dequeue() should be(1)
+      queue.head should be(3)
     }
   }
 
   /**
     * A Tree (here not the built-in version) is an easily composable data type due to matching, etc.
     */
-
   describe("A Tree") {
+
     abstract class Tree
+
     case class Sum(l: Tree, r: Tree) extends Tree
+
     case class Var(n: String) extends Tree
+
     case class Const(v: Int) extends Tree
 
     type Environment = String => Int
@@ -188,15 +206,34 @@ class _08d_Collection_Others extends FunSpec with Matchers {
     }
 
     it("should eval") {
-      val exp: Tree = Sum(Sum(Var("x"), Var("x")),Sum(Const(7), Var("y")))
+      val exp: Tree = Sum(Sum(Var("x"), Var("x")), Sum(Const(7), Var("y")))
       val env: Environment = {
         case "x" => 1
         case "y" => 2
       }
 
       println("Expression: " + exp)
-      Tree.eval(exp, env) should be (11)
+      Tree.eval(exp, env) should be(11)
     }
+  }
+  describe("A List and an Option") {
+    it("can play interestingly ") {
+    //If a stacktrace is as resource consuming in Scala as it is in Java this seems to me no good implementation for me
 
+      def toInt(in: String): Option[Int] = {
+        try {
+          Some(Integer.parseInt(in.trim))
+        } catch {
+          case e: Exception => None
+        }
+      }
+
+      val bag = List("1", "2", "three", "4", "one hundred seventy five")
+      bag.flatMap(toInt).sum should be (7)
+        //flatMap, which is actually mapFlat turns
+        //List(Some(1), Some(2), None, Some(4), None)
+        //into List(1, 2, 4)
+
+    }
   }
 }

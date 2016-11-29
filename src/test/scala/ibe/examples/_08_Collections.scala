@@ -44,4 +44,16 @@ class _08_Collections extends FunSpec with Matchers {
       List[AnyVal](1, 2.0, 33D, 400L).last.getClass.getCanonicalName should be ("java.lang.Long")
     }
   }
+  describe("An mmutable collection") {
+    it("is not that immutable apparently") {
+      //which is explainable by the fact that :+ is replacing the whole collection each time
+      var sisters = collection.immutable.Vector("Banane")
+      sisters = sisters :+ "Apfel"
+      sisters.mkString(",") should be ("Banane,Apfel")
+    }
+    it("but it still is immutable"){
+      var sisters = collection.immutable.Vector("Banane")
+      //sisters(0) = "Ananas" //does not compile, because you try to mutate an immutable object")
+    }
+  }
 }

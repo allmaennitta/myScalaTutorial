@@ -18,7 +18,7 @@ class _04_Loop extends FunSpec with Matchers {
       }
 
       class Thingy(myval: Int = 0) {
-        def getValue :Int = myval
+        def getValue: Int = myval
 
         override def toString: String = {
           "Thingy: " + myval
@@ -75,21 +75,11 @@ class _04_Loop extends FunSpec with Matchers {
       val results = mutable.Stack(6, 12)
       val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       for (a <- myList
-           if a % 2 == 0
-           if a % 3 == 0) {
+        if a % 2 == 0
+        if a % 3 == 0) {
         println(a)
         a should be(results.pop())
       }
-    }
-
-    it("can be used like filter- and map statements") {
-      val expected = mutable.Stack(12, 24)
-      val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-      val results =
-        for (a <- myList
-             if a % 2 == 0
-             if a % 3 == 0) yield a * 2
-      results should be(expected)
     }
 
     it("can be enhanced with zipWithIndex to process value und index at the same time") {
@@ -100,8 +90,23 @@ class _04_Loop extends FunSpec with Matchers {
         s"$count is $e" should be(result(count))
       }
     }
+  }
 
-    it("while loops are boring") {
+  describe("So called 'for comprehensions'") {
+    it("create a collection by a for statement") {
+      val expected = mutable.Stack(12, 24)
+      val myList = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+      val results =
+        for (a <- myList
+          if a % 2 == 0
+          if a % 3 == 0) yield a * 2
+      results should be(expected)
+    }
+  }
+
+
+  describe("While loops") {
+    it(" are boring. Well no, they just behave like expected") {
       val iter = Iterator("a", "b", "c")
 
       iter.hasNext should be(true)
@@ -113,7 +118,7 @@ class _04_Loop extends FunSpec with Matchers {
       iter.hasNext should be(false)
     }
 
-    it("do while loops are boring") {
+    it("do while loops are... we had that") {
       val iter = Iterator("a", "b", "c")
 
       iter.hasNext should be(true)
@@ -123,7 +128,8 @@ class _04_Loop extends FunSpec with Matchers {
         x = true
       } while (false)
 
-      x should be (true)
+      x should be(true)
     }
+
   }
 }
