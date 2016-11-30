@@ -47,7 +47,7 @@ class _08a_IndexedSeq extends FunSpec with Matchers {
       a.updated(0, "x") should be (Vector("x", 2, 3))
       a.updated(0, "x") should be (Vector("x", 2, 3))
       a.updated(0, "x").apply(0).getClass.getCanonicalName should be ("java.lang.String")
-      a.updated(0, "x").apply(1).getClass.getCanonicalName should be ("Integer")
+      a.updated(0, "x").apply(1).getClass.getCanonicalName should be ("java.lang.Integer")
     }
   }
 
