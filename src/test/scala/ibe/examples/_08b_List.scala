@@ -3,6 +3,7 @@ package ibe.examples
 import org.scalatest.{FunSpec, Matchers}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.SeqView
 
 //noinspection SimplifiableFoldOrReduce,SimplifiableFoldOrReduce
 class _08b_List extends FunSpec with Matchers {
@@ -54,28 +55,28 @@ class _08b_List extends FunSpec with Matchers {
       List.concat(listNum, listFruit) should be(List(1, 2, 3, "apple", "cherry", "pear"))
     }
 
-    it("can be flattened"){
-      List(List(1,2), List(3,4)).flatten should be (List(1,2,3,4))
+    it("can be flattened") {
+      List(List(1, 2), List(3, 4)).flatten should be(List(1, 2, 3, 4))
     }
 
-    it("can be grouped"){
+    it("can be grouped") {
       val x = List(15, 10, 5, 8, 20, 12)
 
-      x.groupBy(_ > 10) should be (Map(false -> List(10, 5, 8), true -> List(15, 20, 12)))
+      x.groupBy(_ > 10) should be(Map(false -> List(10, 5, 8), true -> List(15, 20, 12)))
 
-      x.partition(_ > 10) should be (List(15, 20, 12), List(10, 5, 8))
+      x.partition(_ > 10) should be(List(15, 20, 12), List(10, 5, 8))
 
-      x.span(_ < 20) should be (List(15, 10, 5, 8), List(20, 12))
+      x.span(_ < 20) should be(List(15, 10, 5, 8), List(20, 12))
 
-      x.splitAt(2) should be (List(15, 10), List(5, 8, 20, 12))
+      x.splitAt(2) should be(List(15, 10), List(5, 8, 20, 12))
 
-      x.sliding(size = 2).toList should be (List(List(15, 10), List(10, 5), List(5, 8), List(8, 20), List(20, 12))) //is originally returning an iterator
-      x.sliding(size = 2, step = 3).toList should be (List(List(15, 10), List(8, 20)))
+      x.sliding(size = 2).toList should be(List(List(15, 10), List(10, 5), List(5, 8), List(8, 20), List(20, 12))) //is originally returning an iterator
+      x.sliding(size = 2, step = 3).toList should be(List(List(15, 10), List(8, 20)))
 
       val pairs = List(("soup", "cream"), ("fries", "ketchup"))
       val (plaits, toppings) = pairs.unzip
-      plaits should be (List("soup", "fries"))
-      toppings should be (List("cream", "ketchup"))
+      plaits should be(List("soup", "fries"))
+      toppings should be(List("cream", "ketchup"))
     }
 
     it("can be split or reduced in various ways") {
@@ -86,9 +87,24 @@ class _08b_List extends FunSpec with Matchers {
 
       listNum.dropRight(1) should be(List(1, 2))
       listNum.drop(1) should be(List(2, 3))
+
+      List(1, 1, 1, 3, 3, 4).distinct should be(List(1, 3, 4)) //distinct can also be used with objects
+      List(1, 1, 1, 3, 3, 4).toSet.toList should be(List(1, 3, 4))
+    }
+
+    it("can be walked through doing something pairwise and recursively") {
+      val nums = Range(1, 4).toList
+      nums.reduceLeft((x, y) => x + y) should be(6) //long version
+      nums.reduceLeft(_ + _) should be(6) //short version
+      nums.reduceRight(_ + _) should be(6) //starting from the other end, doesn't matter for commutative ops
+      nums.reduce(_ + _) should be(6) // method decides where to start
+      nums.foldLeft(20)(_ + _) should be(26) //same like reduce but with an inital value
+      nums.scanLeft(0)(_ + _) should be(List(0, 1, 3, 6)) //0, 0+1, 1+2, 3+3// Last element is the sum
+      nums.scanRight(0)(_ + _) should be(List(6, 5, 3, 0)) //3+3, 3+2, 0+3, 0 // Last element is the sum
     }
 
     it("can be filled quickly") {
+      List.range(1,5) should be (List(1,2,3,4))
       List.fill(3)("apples") should be(List("apples", "apples", "apples")) //fill list 3 times with "apples"
     }
 
@@ -101,7 +117,7 @@ class _08b_List extends FunSpec with Matchers {
       listNum.addString(new StringBuilder(), "//").toString() should be("1//2//3")
     }
 
-    it("can be checked in various ways") {
+    it("can be checked ") {
       listNum.contains(2) should be(true)
       listNum.contains(4) should be(false)
     }
@@ -112,13 +128,16 @@ class _08b_List extends FunSpec with Matchers {
 
       "hello world".count(_ == 'o') should be(2)
     }
+    it("can be merged with other list") {
+      val freeIndices = List(1, 224, 334, 335, 340)
+      val entriesToSave = List("a", "b", "c", "d", "e")
+      freeIndices zip entriesToSave should be(List((1,"a"), (224,"b"), (334,"c"), (335,"d"), (340,"e")))
+      //can be evaluated e.g. by for((index,value) <- entries){ ... }
+    }
 
-    it("can be summed up in initially strange ways") {
-      def sumWithReduce(ints: List[Int]) = {
-        ints.reduceLeft(_ + _) //could of course be replaced by sum function
-      }
+    it("can be made lazy by adding a view"){
+      Range(1,5).view.map{_*2} // => (SeqView(2, 4, 6, 8)) elements are only generated as demanded
 
-      sumWithReduce(List(1, 3, 9)) should be(13)
     }
 
     it("can be multidimensional") {
@@ -153,7 +172,7 @@ class _08b_List extends FunSpec with Matchers {
       :+ Balloon("r")
       :+ Balloon("r", filled = true)).toList
 
-    printf("Original balloons:%n%s%n", balloons)
+    //printf("Original balloons:%n%s%n", balloons)
 
     it("can be checked for criteria") {
 
