@@ -3,7 +3,7 @@ import sbt.Keys._
 lazy val root = (project in file(".")).
   enablePlugins(TomcatPlugin).
   settings(
-    name := "places",
+    name := "myScalaTutorial",
     version := "1.0",
     scalaVersion := "2.11.8",
     sbtVersion := "0.13.13"
