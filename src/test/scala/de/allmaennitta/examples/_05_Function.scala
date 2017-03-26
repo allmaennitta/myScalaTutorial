@@ -182,7 +182,7 @@ class _05_Function extends FunSpec with Matchers {
 
       def filter(xs: List[Int],     // a list
         p: Int => Boolean) // gets filtered by a boolean filter function
-      : List[Int] = {    // target is to gain a filtered list
+      : List[Int] = {    // objective is to gain a filtered list
         if (xs.isEmpty) xs //trivial
         else if (p(xs.head)) xs.head :: filter(xs.tail, p) //true: head der liste dem nächsten ergebnis voranstellen
         else filter(xs.tail, p) //nächster wert
@@ -198,7 +198,7 @@ class _05_Function extends FunSpec with Matchers {
     class Foo {
       // a method that takes a function and a string, and passes the string into
       // the function, and then executes the function
-      def exec(f:(String) => Unit, name: String) {
+      def exec(f:(String) => String, name: String) : String = {
         f(name)
       }
     }
@@ -209,16 +209,20 @@ class _05_Function extends FunSpec with Matchers {
     // hello variable (from Hello to Hola).
     it("can be a closure") {
         var hello = "Hello"
-        def sayHello(name: String) { println(s"$hello, $name") }
+        def sayHello(name: String): String = {
+          s"$hello, $name"
+        }
+
+        sayHello("Hugo") should be("Hello, Hugo")
 
         // execute sayHello from the exec method foo
         val foo = new Foo
-        foo.exec(sayHello, "Al")
+        foo.exec(sayHello, "Al") should be("Hello, Al")
 
         // change the local variable 'hello', then execute sayHello from
         // the exec method of foo, and see what happens
         hello = "Hola"
-        foo.exec(sayHello, "Lorenzo")
+        foo.exec(sayHello, "Ayo") should be("Hola, Ayo")
     }
   }
 
