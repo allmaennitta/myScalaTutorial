@@ -19,7 +19,7 @@ class _08a_IndexedSeq extends FunSpec with Matchers {
     }
 
     it("is the best general purpose approach for immutable indexed collections") {
-      // use IndexedSeq if you want to be prepared for the case, that an other concrete class
+      // use IndexedSeq instead of Seq if you want to be prepared for the case, that an other concrete class
       // might be chosen as the best general purpose implementation
 
       var seq = IndexedSeq(1, 2, 3)
@@ -94,6 +94,11 @@ class _08a_IndexedSeq extends FunSpec with Matchers {
       for (i <- withTypeAndSize.indices) {
         withTypeAndSize(i) should be(expected(i))
       }
+    }
+
+    it("can be converted into a list"){
+      val arr1 = Array(1, 2, 3)
+      arr1.toList should be (List(1,2,3))
     }
 
     it("can be copied as a whole or in parts") {

@@ -44,7 +44,7 @@ class _08_Collections extends FunSpec with Matchers {
       List[AnyVal](1, 2.0, 33D, 400L).last.getClass.getCanonicalName should be ("java.lang.Long")
     }
   }
-  describe("An mmutable collection") {
+  describe("An immutable collection") {
     it("is not that immutable apparently") {
       //which is explainable by the fact that :+ is replacing the whole collection each time
       var sisters = collection.immutable.Vector("Banane")

@@ -5,15 +5,15 @@ lazy val root = (project in file(".")).
   settings(
     name := "myScalaTutorial",
     version := "1.0",
-    scalaVersion := "2.11.8",
-    sbtVersion := "0.13.13"
+    scalaVersion := "2.12.7",
+    sbtVersion := "1.2.6"
   )
 
-val vTomcat: String = "8.0.30"
-val vScalaTest: String = "3.0.0"
-val vAkka: String = "2.4.10"
-val vSpringBoot: String = "1.4.2.RELEASE"
-val vJackson: String = "2.8.5"
+val vTomcat: String = "9.0.12"
+val vScalaTest: String = "3.0.5"
+val vAkka: String = "2.5.17"
+val vSpringBoot: String = "2.0.6.RELEASE"
+val vJackson: String = "2.9.7"
 
 libraryDependencies ++= Seq(
   //UNIT-TESTING

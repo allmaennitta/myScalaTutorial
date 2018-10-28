@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class _11_Classes extends FunSpec with Matchers {
 
-  describe("A class has constructor args") {
+  describe("A class") {
     trait SomethingToSay {
       //that's a scala-"interface"
       def getTxt: String
