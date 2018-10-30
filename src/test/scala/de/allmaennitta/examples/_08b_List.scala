@@ -122,7 +122,7 @@ class _08b_List extends FunSpec with Matchers {
     }
 
     /**
-      * {@link de.allmaennitta.examples._11b_Traits}
+      * {@link de.allmaennitta.examples._12_Traits}
       */
     it("can be sorted"){
       List("Magnolia", "Daisy", "Rose").sorted should be (List("Daisy", "Magnolia", "Rose"))

@@ -2,7 +2,7 @@ package de.allmaennitta.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _12_PatternMatching extends FunSpec with Matchers {
+class _13_PatternMatching extends FunSpec with Matchers {
 
   describe("A match") {
     it("should dicriminate integers") {
@@ -34,10 +34,9 @@ class _12_PatternMatching extends FunSpec with Matchers {
     }
 
     it("can be assigned directly to a variable, well, the result of the match, of course") {
-
-      intercept[IllegalArgumentException] {
-
         //for the setting to make sense this could be a system property
+      an[IllegalArgumentException] should be thrownBy {
+
         val currentEnv = "halligalli"
 
         //noinspection ScalaUnusedSymbol
@@ -47,8 +46,6 @@ class _12_PatternMatching extends FunSpec with Matchers {
           //for the default case instead of using _ you can set a variable which can be evaluated
           case unknown => throw new IllegalArgumentException(s"'$unknown' is not a valid env name.")
         }
-
-        fail("Error expected but was not triggered")
       }
     }
 
@@ -125,6 +122,24 @@ class _12_PatternMatching extends FunSpec with Matchers {
       name(hans) should be("Hans")
       name(takeshi) should be("Takeshi")
       name(ndugu) should be("Ndugu")
+    }
+  }
+
+  describe("Variable patterns") {
+
+    it("can be used") {
+      import math.{E, Pi}
+      val uppercasePi = E match {
+        case Pi => "strange math? Pi = " + Pi //Uppercase words are not treated as variables
+        case _ => "OK"
+      }
+      uppercasePi should be ("OK")
+
+      val lowercasePi = E match {
+        case pi => "strange math? Pi = " + Pi //lowercase words are treated as variables
+        case _ => "OK"
+      }
+      lowercasePi should startWith ("strange math")
     }
   }
 }

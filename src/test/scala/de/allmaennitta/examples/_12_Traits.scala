@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.language.implicitConversions
 import scala.util.Random
 
-class _11b_Traits extends FunSpec with Matchers {
+class _12_Traits extends FunSpec with Matchers {
 
   /**
     * If
@@ -15,7 +15,7 @@ class _11b_Traits extends FunSpec with Matchers {
     *
     * Or (for Java calls) use a Wrapper (=> see below)
     */
-  describe("A trait") {
+  describe("A trait basically") {
     it("can NOT take arguments.") {
       //trait Animal(name: String) //=> this won't compile
     }
@@ -23,6 +23,8 @@ class _11b_Traits extends FunSpec with Matchers {
     it("can have abstract fields and methods") {
       //it is the Scala way of "interface"
       trait ATrait {
+        val myText: String
+
         def speak() // no body makes the method abstract
       }
     }
@@ -32,11 +34,14 @@ class _11b_Traits extends FunSpec with Matchers {
       trait ATrait {
         def speak()
 
-        // until this point the trait could still be implemented, because there are no implemented methods
-        def speak2() = "hallo" //now there is a method with implementation which prevents direct use in java via 'implements'
+        // until this point the trait could still be implemented, because there are no
+        // implemented methods
+        def speak2() = "hallo" //now there is a method with implementation which prevents direct
+        // use in java via 'implements'
       }
 
-      abstract class ATraitWrapper extends ATrait {} //now ATraitWrapper can be extended in Java extending the ATrait
+      abstract class ATraitWrapper extends ATrait {} //now ATraitWrapper can be extended in Java
+      // extending the ATrait
     }
 
     it("can be specifically called") {
@@ -78,9 +83,59 @@ class _11b_Traits extends FunSpec with Matchers {
       val hulk = new DavidBanner with Angry
       hulk.howAreYou should be("I am very angry!")
     }
+  }
 
-    it("can be stackable together with other traits"){
-      //see http://www.artima.com/scalazine/articles/stackable_trait_pattern.html
+  describe("A trait") {
+    abstract class IntQueue {
+      def get(): Int
+
+      def put(x: Int)
+    }
+    import scala.collection.mutable.ArrayBuffer
+    class BasicIntQueue extends IntQueue {
+      private val buf = new ArrayBuffer[Int]
+
+      def get() = buf.remove(0)
+      def put(x: Int) = {
+        buf += x
+      }
+    }
+
+    it("can be stacked with other traits") {
+      val queue = new BasicIntQueue
+      queue.put(20)
+      queue.get() should be(20)
+      an[IndexOutOfBoundsException] should be thrownBy {
+        queue.get()
+      }
+
+      trait Doubling extends IntQueue { // restrains use on classes extending IntQueue
+        //abstract override is an explicit marker that the trait is dynamically bound
+        abstract override def put(x: Int) = {
+          super.put(2 * x)
+        }
+      }
+
+      class MyQueue extends BasicIntQueue with Doubling
+      val doubledQueue = new MyQueue
+      doubledQueue.put(20)
+      doubledQueue.get() should be(40)
+
+      trait Incrementing extends IntQueue {
+        abstract override def put(x: Int) = {
+          super.put(x+1)
+        }
+      }
+      trait Filtering extends IntQueue {
+        abstract override def put(x: Int) = {
+          if (x >= 0) super.put(x)
+        }
+      }
+
+      val filteredIncrementQueue =  ( new BasicIntQueue with Incrementing with Filtering)
+      filteredIncrementQueue.put(-20)
+      filteredIncrementQueue.put(20)
+      filteredIncrementQueue.get() should be(21)
     }
   }
 
@@ -97,12 +152,14 @@ class _11b_Traits extends FunSpec with Matchers {
     it("by a so called 'self-type'") {
       trait StarfleetWarpCore {
         this: Starship =>
-        // this: Starship with WarpCoreEjector with FireExtinguisher => //variation with even more security precautions
-
+        // this: Starship with WarpCoreEjector with FireExtinguisher => //variation with even
+        // more security precautions
       }
+
       class Starship extends StarfleetWarpCore
-      // class Warbird extends StarfleetWarpCore
-      // new Warbird () should not be ("able to be compiled")
+      // class Warbird extends StarfleetWarpCore //contradicts selftype -> doesn't compile
+
+      new Starship() shouldBe a [StarfleetWarpCore]
     }
 
     it("by requiring a specific structural type to be able to implement the trait") {
@@ -131,11 +188,13 @@ class _11b_Traits extends FunSpec with Matchers {
       class Starship extends StarfleetComponent with StarfleetWarpCore
       // class Warbird extends RomulanComponent with StarfleetWarpCore
       // new Warbird () should not be ("able to be compiled")
+
+      new Starship() shouldBe a [StarfleetWarpCore]
     }
   }
 
 
-  describe("A Helpful predefined traits") {
+  describe("A Helpful predefined trait") {
     it("is the Ordered-Trait") {
 
       class Dummy(private var prop: String) extends Ordered[Dummy] {

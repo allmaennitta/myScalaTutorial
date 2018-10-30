@@ -2,7 +2,7 @@ package de.allmaennitta.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _11a_Inheritance extends FunSpec with Matchers {
+class _11_Inheritance extends FunSpec with Matchers {
 
   //noinspection ScalaDocMissingParameterDescription,ScalaDocMissingParameterDescription
   describe("A Point-class") {

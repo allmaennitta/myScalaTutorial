@@ -20,13 +20,11 @@ class _01_AppAndImports extends FunSpec with Matchers {
     it("can be used by Scala without complications") {
       val salut: String = SalutMonde.execute()
       salut should startWith("Salut, monde")
+      //todo: add some fuzzy test for date
     }
   }
 
-
-
   describe("A Scala application"){
-
     /**
       * 1. Put the code into a file named HelloWorld.scala
       * 2. Run 'scalac HelloWorld.scala', which compiles the class
