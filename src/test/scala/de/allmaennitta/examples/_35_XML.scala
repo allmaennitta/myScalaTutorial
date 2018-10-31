@@ -2,7 +2,7 @@ package de.allmaennitta.examples
 
 import org.scalatest.{FunSpec, Matchers}
 
-class _17_XML extends FunSpec with Matchers {
+class _35_XML extends FunSpec with Matchers {
 
   describe("XML-field content") {
     val liste = <einkaufsliste>

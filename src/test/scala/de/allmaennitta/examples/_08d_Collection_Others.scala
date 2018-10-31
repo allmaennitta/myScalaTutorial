@@ -217,7 +217,7 @@ class _08d_Collection_Others extends FunSpec with Matchers {
     }
   }
   describe("A List and an Option") {
-    it("can play interestingly ") {
+    it("can play together interestingly ") {
     //If a stacktrace is as resource consuming in Scala as it is in Java this seems to me no good implementation for me
 
       def toInt(in: String): Option[Int] = {
