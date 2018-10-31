@@ -126,7 +126,6 @@ class _13_PatternMatching extends FunSpec with Matchers {
   }
 
   describe("Variable patterns") {
-
     it("can be used") {
       import math.{E, Pi}
       val uppercasePi = E match {
@@ -140,6 +139,44 @@ class _13_PatternMatching extends FunSpec with Matchers {
         case _ => "OK"
       }
       lowercasePi should startWith ("strange math")
+    }
+  }
+
+  describe("Case sequences") {
+    it("can be functions") {
+      val withDefault: Option[Int] => Int = {
+        case Some(x) => x
+        case None => 0
+      }
+      withDefault(Some(5)) should be (5)
+      withDefault(None) should be (0)
+
+      def answerQuestion (any: Any) : String = any match {
+        case qu: String if qu.contains("answer to all questions") => "42"
+        case _ => "Don't know."
+      }
+      answerQuestion("What is love?") should be ("Don't know.")
+      answerQuestion("What is the answer to all questions?") should be ("42")
+
+    }
+    it("can be partial functions") {
+      val second: List[Int] => Int = {
+        case x :: y :: _ => y //not exhaustive
+      }
+
+      second(List(1,2,3)) should be (2)
+      a[MatchError] should be thrownBy {
+        second(Nil)
+      }
+
+      val secondPartial: PartialFunction[List[Int], Int] = {
+        case x :: y :: _ => y //not exhaustive
+      }
+
+      secondPartial.isDefinedAt(List(4,5)) should be (true)
+      secondPartial.isDefinedAt(List(4)) should be (false)
+      secondPartial.isDefinedAt(List()) should be (false)
+      secondPartial(List(4,5)) should be (5)
     }
   }
 }

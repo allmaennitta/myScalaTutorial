@@ -9,7 +9,7 @@ lazy val root = (project in file(".")).
     sbtVersion := "1.2.6"
   )
 
-val vTomcat: String = "9.0.12"
+val vTomcat: String = "8.5.2"
 val vScalaTest: String = "3.0.5"
 val vAkka: String = "2.5.17"
 val vSpringBoot: String = "2.0.6.RELEASE"
