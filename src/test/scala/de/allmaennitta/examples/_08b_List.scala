@@ -272,7 +272,7 @@ class _08b_List extends FunSpec with Matchers {
       List(0, 1, "2", "3", Some(4), Some("5")).collect(convertFn) should be(List(0, 1, 2, 3, 5))
     }
 
-    it("'aggregate' can help to calculate parallely with trees") {
+    it("'aggregate' can help to calculate parallewith trees") {
       val listOfBinaries = List("001", "010", "11", "100")
       listOfBinaries.aggregate(0)( //constant to which later values are added
         {
