@@ -29,8 +29,11 @@ class _17_HigherFunctions extends FunSpec with Matchers {
   }
   describe("A combination of higher functions") {
     it("can be transformed into a for statement") {
-      List(1,2,3) map (i => (1,i)) should be (List((1,1),(1,2),(1,3)))
+      List.range(1,3) flatMap (i => List.range(4,6).map (j => (i,j))) should be (List((1,4),(1,5),(2,4),(2,5)))
+      List.range(1,3) flatMap (i => List.range(1,i).map (j => (i,j))) should be (List((2,1)))
 
+      () => for (i <- List.range(1,3);j <- List.range(4,6)) yield (i,j) should be (List((1,4),(1,5),(2,4),(2,5)))
+      () => for (i <- List.range(1,3);j <- List.range(1,i)) yield (i,j) should be (List((2,1)))
     }
   }
 }
