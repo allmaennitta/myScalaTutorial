@@ -4,7 +4,7 @@ import org.scalatest.{FunSpec, Matchers}
 
 import scala.util.matching.Regex
 
-class _13_RegularExpressions extends FunSpec with Matchers {
+class _40_RegularExpressions extends FunSpec with Matchers {
 
   describe("A regular expression") {
     it("is able to find 'scala'") {
