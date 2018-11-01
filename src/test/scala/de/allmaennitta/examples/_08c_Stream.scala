@@ -22,7 +22,7 @@ class _08c_Stream extends FunSpec with Matchers {
 
       fibFrom(1, 1).take(10).toList should be(List(1, 1, 2, 3, 5, 8, 13, 21, 34, 55))
 
-      intercept[StackOverflowError] {
+      a[StackOverflowError] should be thrownBy {
         //here the infinite list hits the limits
         fibFromEndless(1, 1).take(10) should be(List(1, 1, 2, 3, 5, 8, 13, 21, 34, 55))
       }

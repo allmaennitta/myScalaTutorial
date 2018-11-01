@@ -153,11 +153,6 @@ class _08b_List extends FunSpec with Matchers {
       //can be evaluated e.g. by for((index,value) <- entries){ ... }
     }
 
-    it("can be made lazy by adding a view"){
-      Range(1,5).view.map{_*2} // => (SeqView(2, 4, 6, 8)) elements are only generated as demanded
-
-    }
-
     it("can be multidimensional") {
       val matrixLists: List[List[Int]] =
         List(
