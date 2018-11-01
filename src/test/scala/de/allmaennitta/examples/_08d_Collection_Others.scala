@@ -274,4 +274,30 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       arr should be (Array(0, 1, 2, -3, -4, -5, 6, 7, 8, 9))
     }
   }
+
+  describe("JavaCollections") {
+    import collection.JavaConversions._
+    import collection.JavaConverters._
+    import collection.mutable._
+      it("Can be used") {
+        val julOld: java.util.List[Int] = List(1,2,3) //mutable: use ArrayBuffer
+        val julNew = List(1,2,3).asJava //mutable: use ArrayBuffer
+        val bufOld: Seq[Int] = julOld
+        val bufNew: Seq[Int] = julNew
+        bufOld.head should be (1)
+        bufNew.head should be (1)
+
+        val mOld: java.util.Map[String, Int] = HashMap("abc" -> 1, "hello" -> 2)
+        val mNew = HashMap("abc" -> 1, "hello" -> 2).asJava
+        mOld.get("abc") should be (1)
+        mNew.get("abc") should be (1)
+
+        a[UnsupportedOperationException] should be thrownBy {
+          julOld.add(4)
+        }
+        a[UnsupportedOperationException] should be thrownBy {
+          julNew.add(4)
+        }
+      }
+  }
 }
