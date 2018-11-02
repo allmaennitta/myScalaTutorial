@@ -22,9 +22,13 @@ class _17_HigherFunctions extends FunSpec with Matchers {
 
     it("is, that map takes a function producing single values") {
       List(1, 2, 3).map(twoTimes).sum should be(12)
+      List("hallo", "welt") map (_.toList) should be
+        (List(List('h', 'a', 'l', 'l', 'o'), List('w', 'e', 'l', 't')))
     }
     it("is, that flatMap takes a function producing lists, reducing them to single values afterwards") {
       List(1, 2, 3).map(twoTimes).flatMap(intToIntList).sum should be(12)
+      List("hallo", "welt") flatMap (_.toList) should be
+          (List('h', 'a', 'l', 'l', 'o', 'w', 'e', 'l', 't'))
     }
   }
   describe("A combination of higher functions") {
