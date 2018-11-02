@@ -142,8 +142,8 @@ class _13_PatternMatching extends FunSpec with Matchers {
     }
   }
 
-  describe("Case sequences") {
-    it("can be functions") {
+  describe("A Case sequence") {
+    it("can be a function") {
       val withDefault: Option[Int] => Int = {
         case Some(x) => x
         case None => 0
@@ -159,7 +159,7 @@ class _13_PatternMatching extends FunSpec with Matchers {
       answerQuestion("What is the answer to all questions?") should be ("42")
 
     }
-    it("can be partial functions") {
+    it("can be a partial function") {
       val second: List[Int] => Int = {
         case x :: y :: _ => y //not exhaustive
       }
@@ -178,5 +178,9 @@ class _13_PatternMatching extends FunSpec with Matchers {
       secondPartial.isDefinedAt(List()) should be (false)
       secondPartial(List(4,5)) should be (5)
     }
+    it("can rewrite a map") {
+      Map("a" -> 1, "b" -> 2) map { case (x, y) => (y, x) } should be (Map(1 -> "a", 2 -> "b"))
+    }
   }
+
 }

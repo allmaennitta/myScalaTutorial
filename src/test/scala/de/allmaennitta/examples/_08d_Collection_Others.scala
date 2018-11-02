@@ -258,20 +258,28 @@ class _08d_Collection_Others extends FunSpec with Matchers {
       }
     }
     it("saves you construction of big lists") {
-      val words = List("aal","aas","aba","abo","abs","aby","ace","act","add","ado","ads","adz","aff","aft","aga","age","ago","ags","aha","ahi","ahs","aid","ail","aim","ain","air","ais","ait","ala","alb","ale","all","alp","als","alt","ama","ami","amp","amu","ana","and","ane","ani","ant","any","ape","apo","app","apt","arb","arc","are","arf","ark","arm","ars","art","ash","ask","asp","ass","ate","att","auk")
-      def isPalindrome(x:String) = x == x.reverse
-      def findPalindrome(s:Seq[String]) = s.find(isPalindrome).getOrElse("")
+      val words = List("aal", "aas", "aba", "abo", "abs", "aby", "ace", "act", "add", "ado",
+        "ads", "adz", "aff", "aft", "aga", "age", "ago", "ags", "aha", "ahi", "ahs", "aid",
+        "ail", "aim", "ain", "air", "ais", "ait", "ala", "alb", "ale", "all", "alp", "als",
+        "alt", "ama", "ami", "amp", "amu", "ana", "and", "ane", "ani", "ant", "any", "ape",
+        "apo", "app", "apt", "arb", "arc", "are", "arf", "ark", "arm", "ars", "art", "ash",
+        "ask", "asp", "ass", "ate", "att", "auk")
 
-      findPalindrome(words) should be ("aba") //without view
-      findPalindrome(words.view) should be ("aba") //with view as a "search window"
+      def isPalindrome(x: String) = x == x.reverse
+
+      def findPalindrome(s: Seq[String]) = s.find(isPalindrome).getOrElse("")
+
+      findPalindrome(words) should be("aba") //without view
+      findPalindrome(words.view) should be("aba") //with view as a "search window"
     }
 
     it("helps to update mutable sequences selectively") {
       def negate(xs: collection.mutable.Seq[Int]) = for (i <- 0 until xs.length) xs(i) = -xs(i)
+
       val arr = (0 to 9).toArray
-      val subarr = arr.view.slice(3,6)
+      val subarr = arr.view.slice(3, 6)
       negate(subarr)
-      arr should be (Array(0, 1, 2, -3, -4, -5, 6, 7, 8, 9))
+      arr should be(Array(0, 1, 2, -3, -4, -5, 6, 7, 8, 9))
     }
   }
 
@@ -279,25 +287,35 @@ class _08d_Collection_Others extends FunSpec with Matchers {
     import collection.JavaConversions._
     import collection.JavaConverters._
     import collection.mutable._
-      it("Can be used") {
-        val julOld: java.util.List[Int] = List(1,2,3) //mutable: use ArrayBuffer
-        val julNew = List(1,2,3).asJava //mutable: use ArrayBuffer
-        val bufOld: Seq[Int] = julOld
-        val bufNew: Seq[Int] = julNew
-        bufOld.head should be (1)
-        bufNew.head should be (1)
+    it("Can be used") {
+      val julOld: java.util.List[Int] = List(1, 2, 3) //mutable: use ArrayBuffer
+      val julNew = List(1, 2, 3).asJava //mutable: use ArrayBuffer
+      val bufOld: Seq[Int] = julOld
+      val bufNew: Seq[Int] = julNew
+      bufOld.head should be(1)
+      bufNew.head should be(1)
 
-        val mOld: java.util.Map[String, Int] = HashMap("abc" -> 1, "hello" -> 2)
-        val mNew = HashMap("abc" -> 1, "hello" -> 2).asJava
-        mOld.get("abc") should be (1)
-        mNew.get("abc") should be (1)
+      val mOld: java.util.Map[String, Int] = HashMap("abc" -> 1, "hello" -> 2)
+      val mNew = HashMap("abc" -> 1, "hello" -> 2).asJava
+      mOld.get("abc") should be(1)
+      mNew.get("abc") should be(1)
 
-        a[UnsupportedOperationException] should be thrownBy {
-          julOld.add(4)
-        }
-        a[UnsupportedOperationException] should be thrownBy {
-          julNew.add(4)
-        }
+      a[UnsupportedOperationException] should be thrownBy {
+        julOld.add(4)
       }
+      a[UnsupportedOperationException] should be thrownBy {
+        julNew.add(4)
+      }
+    }
+
+    describe("A Bit Set") {
+      import scala.collection.immutable.BitSet
+      it("are a set of non-negative integers. Size depends on the largest stored integer. " +
+        "They are extremely efficient, when many small numbers are stored.") {
+
+        s"${BitSet(1,9,8,6,5,0)}" should be ("BitSet(0, 1, 5, 6, 8, 9)")
+        BitSet(1,9,8,6,5,0).head should be (0)
+      }
+    }
   }
 }
