@@ -5,7 +5,7 @@ import org.scalatest.{FunSpec, Matchers}
 import scala.collection.IndexedSeqLike
 import scala.collection.generic.CanBuildFrom
 // https://docs.scala-lang.org/overviews/core/architecture-of-scala-collections.html
-class _45_ImplementYourOwnCollection extends FunSpec with Matchers {
+class _45_OwnCollections_RNA extends FunSpec with Matchers {
 
   abstract class Base
   case object A extends Base
