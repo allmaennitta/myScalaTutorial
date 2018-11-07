@@ -9,6 +9,8 @@ import scala.collection.generic.CanBuildFrom
 class _46_OwnCollections_PatriciaTrie extends FunSpec with Matchers {
 
   import collection._
+  import scala.collection.mutable.{Builder, MapBuilder}
+  import scala.collection.generic.CanBuildFrom
 
   final class PrefixMap[T]
     extends mutable.Map[String, T]
@@ -19,7 +21,7 @@ class _46_OwnCollections_PatriciaTrie extends FunSpec with Matchers {
 
     def get(s: String): Option[T] =
       if (s.isEmpty) value
-      else suffixes get (s(0)) flatMap (_.get(s substring 1))
+      else suffixes get s(0) flatMap (_.get(s substring 1))
 
     def withPrefix(s: String): PrefixMap[T] =
       if (s.isEmpty) this
@@ -58,9 +60,6 @@ class _46_OwnCollections_PatriciaTrie extends FunSpec with Matchers {
     override def empty = new PrefixMap[T]
   }
 
-  import scala.collection.mutable.{Builder, MapBuilder}
-  import scala.collection.generic.CanBuildFrom
-
   object PrefixMap extends {
     def empty[T] = new PrefixMap[T]
 
@@ -73,8 +72,7 @@ class _46_OwnCollections_PatriciaTrie extends FunSpec with Matchers {
     def newBuilder[T]: Builder[(String, T), PrefixMap[T]] =
       new MapBuilder[String, T, PrefixMap[T]](empty)
 
-    implicit def canBuildFrom[T]
-    : CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] =
+    implicit def canBuildFrom[T]: CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] =
       new CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] {
         def apply(from: PrefixMap[_]) = newBuilder[T]
         def apply() = newBuilder[T]
@@ -83,17 +81,33 @@ class _46_OwnCollections_PatriciaTrie extends FunSpec with Matchers {
 
   describe("A PrefixMap") {
     it("can be created") {
-      PrefixMap.empty[String].size should be (0)                                // => empty
-      var m = PrefixMap("hello" -> 5, "hi" -> 2)
-      m.get("hi").getOrElse(-99) should be (2)                                  // => apply
-      m.get("h").getOrElse(-99) should be (-99)                                  // => apply
-      m map { case (k, v) => (k + "!", "x" * v) } should be
-        (PrefixMap("hello!" -> "xxxxx", "hi!" -> "xx" ))                        // => canBuildFrom
-      val m2 = PrefixMap("abc" -> 0, "abd" -> 1, "al" -> 2,
-        "all" -> 3, "xy" -> 4)
-      m2.get("xy").getOrElse(-99) should be (4)
-      val m3 = m2 withPrefix("x")
-      m3 should be (PrefixMap("y" -> 4))
+      var m1 = PrefixMap.empty[Int]
+      m1.size should be (0)                                // empty
+      val retVal = m1 += ("abc" -> 5)                      // +=
+      retVal should be (PrefixMap("abc" -> 5))             // apply
+      m1 should be (PrefixMap("abc" -> 5))
+      m1 map { case (k,v) => (k+"!", v+1)} should be       // canBuildFrom
+        (PrefixMap("abc!" -> 6))
+      val concatMap = m1 ++= PrefixMap("xyz" -> 11)
+      concatMap  should be (PrefixMap("abc" -> 5, "xyz" -> 11))
+      val capitals = PrefixMap("Andorra"->"Andorra la Vella", "Angola"->"Luanda", "Antigua und " +
+        "Barbuda"->"St. John’s", "Äquatorialguinea"->"Malago", "Argentinien" ->"	Buenos Aires",
+        "Armenien"->"Jerewan", "TestCountry"->"TestCapital")
+      capitals.get("TestCountry") should be (Some("TestCapital"))
+      capitals.remove("TestCountry")                                              //remove
+      capitals.get("TestCountry") should be (None)                                //get
+      capitals.update("Äquatorialguinea","Malabo")                                //update
+      capitals.withPrefix("An") should be (PrefixMap(                             //withPrefix
+        "dorra" -> "Andorra la Vella", "gola" -> "Luanda", "tigua und Barbuda" -> "St. John’s"))
+
+//      m.get("hi").getOrElse(-99) should be (2)                                  // => apply
+//      m.get("h").getOrElse(-99) should be (-99)                                  // => apply
+//      m map { case (k, v) => (k + "!", "x" * v) } should be
+//        (PrefixMap("hello!" -> "xxxxx", "hi!" -> "xx" ))                        // => canBuildFrom
+
+//      m2.get("xy").getOrElse(-99) should be (4)
+//      val m3 = m2 withPrefix("x")
+//      m3 should be (PrefixMap("y" -> 4))
     }
   }
 
