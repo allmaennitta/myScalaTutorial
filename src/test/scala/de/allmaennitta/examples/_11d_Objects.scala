@@ -111,8 +111,8 @@ class _11d_Objects extends FunSpec with Matchers {
     }
 
     it("can be realized by using 'apply'"){
-      Animal(Animal.DOG).getClass.toString should be ("class de.allmaennitta.examples._11d_Objects$$anonfun$3$Animal$3$Dog")
-      Animal(Animal.CAT).getClass.toString should be ("class de.allmaennitta.examples._11d_Objects$$anonfun$3$Animal$3$Cat")
+      Animal(Animal.DOG).getClass.toString should be ("class de.allmaennitta.examples._11d_Objects$Animal$3$Dog")
+      Animal(Animal.CAT).getClass.toString should be ("class de.allmaennitta.examples._11d_Objects$Animal$3$Cat")
     }
   }
 }

@@ -49,6 +49,26 @@ class _40_RegularExpressions extends FunSpec with Matchers {
       copyright("New York: 2016") should be ("4d: 2016")
       copyright("New York: 201") should be ("")
     }
+
+    it("provides negative and positive lookahead (like Java)") {
+      val notEqualsAfterColon = new Regex(""":(?!=)""")
+      notEqualsAfterColon
+        .findFirstIn("::")
+        .isDefined should be (true)
+      notEqualsAfterColon
+        .findFirstIn(":=")
+        .isDefined should be (false)
+
+      //der lookahead "frisst" das muster nicht auf, weshalb das "=" wiederholt werden muss
+      val equalsAfterColon = new Regex("""(\w+)\s*:(?==)=\s*(\w+)""")
+      val m = equalsAfterColon findFirstMatchIn("a := b")
+      println("Match:"+m)
+      val result = m match {
+        case Some(m) => (m.group(1),m.group(2))
+        case None => ("N.N", "N.N")
+      }
+      result should be (("a","b"))
+    }
   }
 
 }

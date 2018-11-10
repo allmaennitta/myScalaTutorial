@@ -18,7 +18,7 @@ class Hotel {
 
   @Id
   @GeneratedValue
-  @BeanProperty
+  @BeanProperty //creates getter and setter
   var id: Long = _
 
   @BeanProperty

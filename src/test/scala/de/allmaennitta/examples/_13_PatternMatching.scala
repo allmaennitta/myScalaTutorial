@@ -182,5 +182,29 @@ class _13_PatternMatching extends FunSpec with Matchers {
       Map("a" -> 1, "b" -> 2) map { case (x, y) => (y, x) } should be (Map(1 -> "a", 2 -> "b"))
     }
   }
+  describe("A pattern match with variable binding") {
+    abstract class Expr
+    case class Var(value: Int) extends Expr
+    case class UnOp(operator: String, arg: Expr) extends Expr
+
+    it("works") {
+      val expr = UnOp("abs", UnOp("abs", Var(5)))
+      val result1 = expr match {
+        case UnOp("abs",e @ UnOp("abs", _)) => e.arg
+        case _ =>
+      }
+
+      result1 should be (Var(5))
+
+      val result2 = expr match {
+        case UnOp("abs", UnOp("abs", e @ _)) => e.asInstanceOf[Var].value
+        case _ =>
+      }
+
+      result2 should be (5)
+    }
+  }
+
+
 
 }

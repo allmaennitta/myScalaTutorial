@@ -32,10 +32,6 @@ class _16_IO extends FunSpec with Matchers {
       result.mkString(" ") should be("Wir leben an der Côte d'Azur. Wir leben in der Nähe von Mata las Cañas.")
 
       Files.delete(file.toPath)
-
-      intercept[IOException] {
-        source should be("this test should never be evaluated")
-      }
     }
   }
   describe("A binary file") {
