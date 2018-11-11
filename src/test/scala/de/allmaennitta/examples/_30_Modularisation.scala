@@ -48,7 +48,6 @@ object SimpleDatabase extends Database with SimpleFoods with SimpleRecipes {
 }
 
 trait SimpleFoods {
-
   object Pear extends Food("Pear")
 
   def allFoods = List(Apple, Orange, Cream, Sugar)
@@ -84,8 +83,7 @@ object StudentDatabase extends Database {
     List(FrozenFood)))
 }
 
-abstract class Browser { //common attributes, etc. go here
-  val database: Database
+abstract class Browser (val database: Database) {
 
   def recipesUsing(food: Food) =
     database.allRecipes.filter(recipe => //hard link! XXX
@@ -100,8 +98,9 @@ class _30_Modularisation extends FunSpec with Matchers {
   describe("Both, a wired modularised database and browser") {
     val db: Database = SimpleDatabase
     object browser extends Browser {
-      val database: db.type = db //db.type => singleton-type, tell the compiler, that both types are the same object
-                                 //not necessary in this case, but it might be in other situations
+      val database: db.type = db //db.type => singleton-type, tell the compiler, that both types
+      // are the same object
+      //not necessary in this case, but it might be in other situations
     }
 
     it("works") {
